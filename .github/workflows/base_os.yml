@@ -28,7 +28,17 @@ jobs:
       - name: Run pi-gen Build
         run: |
           sudo ./build-docker.sh
-    
+
+      - name: Debug - Search for .img across all folders
+        run: |
+          echo "Searching for *.img..."
+          find . -type f -name "*.img" -exec ls -lh {} \;
+        
+      - name: Debug - Search for *.zip
+        run: |
+          echo "Searching for *.zip..."
+          find . -type f -name "*.zip" -exec ls -lh {} \;
+        
       - name: Debug - List files in deploy directory
         run: |
           echo "Current working directory:"
