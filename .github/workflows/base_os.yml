@@ -32,7 +32,8 @@ jobs:
       - name: Try Upload with Official Action
         id: try_upload
         continue-on-error: true
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v3.1.2
+
         with:
           name: fleet_os_base
           path: deploy/*.img
