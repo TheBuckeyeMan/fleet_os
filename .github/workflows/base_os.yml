@@ -28,6 +28,21 @@ jobs:
       - name: Run pi-gen Build
         run: |
           sudo ./build-docker.sh
+    
+      - name: Debug - List files in deploy directory
+        run: |
+          echo "Current working directory:"
+          pwd
+
+          echo "Listing base directory contents:"
+          ls -lh
+
+          echo "Listing deploy directory contents:"
+          ls -lh deploy || echo "deploy directory does not exist"
+
+          echo "Checking for .img files:"
+          find deploy -name "*.img" || echo "No .img file found"
+
 
       - name: Manually clone upload-artifact action
         run: |
