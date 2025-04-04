@@ -30,7 +30,7 @@ jobs:
           sudo ./build-docker.sh
 
       - name: Upload Built Image
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v2.3.1
         with:
           name: fleet_os_base
           path: deploy/*.img
