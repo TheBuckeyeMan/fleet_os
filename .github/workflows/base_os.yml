@@ -29,8 +29,38 @@ jobs:
         run: |
           sudo ./build-docker.sh
 
-      - name: Upload Built Image
-        uses: actions/upload-artifact@v3
+      - name: Debug - Search for .img across all folders
+        run: |
+          echo "Searching for *.img..."
+          find . -type f -name "*.img" -exec ls -lh {} \;
+        
+      - name: Debug - Search for *.zip
+        run: |
+          echo "Searching for *.zip..."
+          find . -type f -name "*.zip" -exec ls -lh {} \;
+        
+      - name: Debug - List files in deploy directory
+        run: |
+          echo "Current working directory:"
+          pwd
+
+          echo "Listing base directory contents:"
+          ls -lh
+
+          echo "Listing deploy directory contents:"
+          ls -lh deploy || echo "deploy directory does not exist"
+
+          echo "Checking for .img files:"
+          find deploy -name "*.img" || echo "No .img file found"
+
+
+      - name: Manually clone upload-artifact action
+        run: |
+          git clone https://github.com/actions/upload-artifact.git ./.github/actions/upload-artifact
+        
+      - name: Upload Built Image (manual fallback)
+        uses: ./.github/actions/upload-artifact
         with:
-          name: fleet_os_base
-          path: deploy/*.img
+            name: fleet_os_base
+            path: deploy/*.img
+        
