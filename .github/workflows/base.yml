@@ -5,7 +5,7 @@ on:
 
 jobs:
     build:
-        runs-on: ubuntu-latest
+        runs-on: ubuntu-22.04 #Latest might not have everyhting we need
 
         permissions:
             contents: read  # Allow read access to the repository contents
