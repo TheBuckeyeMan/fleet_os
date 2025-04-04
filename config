@@ -1,0 +1,18 @@
+IMG_NAME='fleet_os'
+RELEASE='bookworm'
+ENABLE_SSH=1
+
+LOCALE_DEFAULT="en_US.UTF-8"
+KEYBOARD_KEYMAP="us"
+KEYBOARD_LAYOUT="English (US)"
+TIMEZONE_DEFAULT="America/New_York"
+
+FIRST_USER_NAME=pi
+FIRST_USER_PASS=raspberry
+DISABLE_FIRST_BOOT_USER_RENAME=1
+
+DEPLOY_DIR=./deploy          # Output directory for your .img file
+DEPLOY_COMPRESSION=zip         # Compress final image to .zip
+WPA_COUNTRY=US               # Wi-Fi country code
+
+STAGE_LIST="stage0 stage1 stage2" #Add your custom stage here in the order you want to execute
