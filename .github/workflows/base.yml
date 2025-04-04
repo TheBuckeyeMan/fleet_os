@@ -1,4 +1,4 @@
-name: Build Raspberry Pi Image
+name: Base Custom Raspberry Pi OS
 
 on:
   workflow_dispatch:  # Manual trigger from GitHub UI
@@ -30,7 +30,7 @@ jobs:
                 sudo ./build-docker.sh
       
             - name: Upload built image
-              uses: actions/upload-artifact@v2
+              uses: actions/upload-artifact@v2@b3c718c0213b8187a5fe2e48b3d2da2a8962f9f3
               with:
-                name: fleet_os_image
+                name: fleet_os_base
                 path: deploy/*.img
