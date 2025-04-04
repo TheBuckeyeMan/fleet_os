@@ -29,8 +29,13 @@ jobs:
         run: |
           sudo ./build-docker.sh
 
-      - name: Upload Built Image
-        uses: actions/upload-artifact@v2.3.1
+      - name: Manually clone upload-artifact action
+        run: |
+          git clone https://github.com/actions/upload-artifact.git ./.github/actions/upload-artifact
+        
+      - name: Upload Built Image (manual fallback)
+        uses: ./.github/actions/upload-artifact
         with:
-          name: fleet_os_base
-          path: deploy/*.img
+            name: fleet_os_base
+            path: deploy/*.img
+        
