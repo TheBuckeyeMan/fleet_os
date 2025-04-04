@@ -1,36 +1,36 @@
 name: Base Custom Raspberry Pi OS
 
 on:
-  workflow_dispatch:  # Manual trigger from GitHub UI
+  workflow_dispatch:  # Allows manual trigger from the GitHub UI
 
 jobs:
-    build:
-        runs-on: ubuntu-22.04 #Latest might not have everyhting we need
+  build:
+    runs-on: ubuntu-22.04  # Avoid latest to ensure stability
 
-        permissions:
-            contents: read  # Allow read access to the repository contents
-        
-        steps:
-            - name: Checkout Repo
-              uses: actions/checkout@v3
+    permissions:
+      contents: read  # Read access to repo
 
-            - name: Set up QEMU for ARM
-              uses: docker/setup-qemu-action@v2
-      
-            - name: Set up Docker Buildx
-              uses: docker/setup-buildx-action@v2
-      
-            - name: Install dependencies
-              run: |
-                sudo apt-get update
-                sudo apt-get install -y qemu-user-static coreutils zip unzip rsync dosfstools debootstrap zerofree parted pigz
-      
-            - name: Run pi-gen build
-              run: |
-                sudo ./build-docker.sh
-      
-            - name: Upload built image
-              uses: actions/upload-artifact@v2@b3c718c0213b8187a5fe2e48b3d2da2a8962f9f3
-              with:
-                name: fleet_os_base
-                path: deploy/*.img
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v3
+
+      - name: Set up QEMU for ARM
+        uses: docker/setup-qemu-action@v2
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Install Dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y qemu-user-static coreutils zip unzip rsync dosfstools debootstrap zerofree parted pigz
+
+      - name: Run pi-gen Build
+        run: |
+          sudo ./build-docker.sh
+
+      - name: Upload Built Image
+        uses: actions/upload-artifact@v2@b3c718c0213b8187a5fe2e48b3d2da2a8962f9f3
+        with:
+          name: fleet_os_base
+          path: deploy/*.img
