@@ -350,4 +350,12 @@ if [ -x "${BASE_DIR}/postrun.sh" ]; then
 	log "End postrun.sh"
 fi
 
+# ✅ Ensure the .img file is copied into the main deploy directory for GitHub Actions
+echo "🔁 Copying final image(s) into top-level deploy directory..."
+
+find "${WORK_DIR}" -name "*.img" -exec cp {} "${DEPLOY_DIR}/" \;
+
+echo "✅ Image copy complete. Contents of deploy/:"
+ls -lh "${DEPLOY_DIR}"
+
 log "End ${BASE_DIR}"
