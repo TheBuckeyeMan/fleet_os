@@ -29,30 +29,13 @@ jobs:
         run: |
           sudo ./build-docker.sh
 
-      - name: Try Upload with Official Action
-        id: try_upload
-        continue-on-error: true
-        uses: actions/upload-artifact@v3.1.2
-
-        with:
-          name: fleet_os_base
-          path: deploy/*.img
-        
-      - name: Check if Upload Failed
-        if: steps.try_upload.outcome == 'failure'
-        run: |
-          echo "Fallback to manual upload"
-    
-      - name: Clone Upload Artifact Manually (Fallback)
-        if: steps.try_upload.outcome == 'failure'
+      - name: Manually clone upload-artifact action
         run: |
           git clone https://github.com/actions/upload-artifact.git ./.github/actions/upload-artifact
-    
-      - name: Manual Upload (Fallback)
-        if: steps.try_upload.outcome == 'failure'
+        
+      - name: Upload Built Image (manual fallback)
         uses: ./.github/actions/upload-artifact
         with:
-          name: fleet_os_base
-          path: deploy/*.img
-        
+            name: fleet_os_base
+            path: deploy/*.img
         
