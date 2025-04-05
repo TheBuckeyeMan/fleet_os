@@ -63,7 +63,7 @@ We will be able to insert it in between the other stages using the STAGE_LIST
 
 ## Implementing the Custom Stage
 1. In base directory, make a new stage directory
-2. in the config file, add or modify the STAGE_LIST="stage0 stage1 stage2 <your stage here>" to include your new custom stage
+2. in the config file, add or modify the STAGE_LIST="stage0 stage1 stage2 <your stage here - MUST BE IN FORMAT(stage#)>>" to include your new custom stage
 2. Add a prerun.sh file to the new directory
 4. When adding .sh files, you must run the following command LOCALLY BEFORE YOU PUSH TO GITHUB in order to make the files executable chmod +x <File PAth> (This makes it executable)
 
