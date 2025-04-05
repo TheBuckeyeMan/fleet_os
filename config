@@ -7,12 +7,12 @@ KEYBOARD_KEYMAP="us"
 KEYBOARD_LAYOUT="English (US)"
 TIMEZONE_DEFAULT="America/New_York"
 
-FIRST_USER_NAME=pi
-FIRST_USER_PASS=raspberry
+FIRST_USER_NAME=pi # Change this as username
+FIRST_USER_PASS=raspberry # Change this as passsword
 DISABLE_FIRST_BOOT_USER_RENAME=1
 
 DEPLOY_DIR=./deploy          # Output directory for your .img file
 DEPLOY_COMPRESSION=none         # Compress final image to .zip
 WPA_COUNTRY=US               # Wi-Fi country code
 
-STAGE_LIST="stage0 stage1 stage2" #Add your custom stage here in the order you want to execute
+STAGE_LIST="stage0 stage1 stage2 connect-wifi" #Add your custom stage here in the order you want to execute
