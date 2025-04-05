@@ -22,3 +22,12 @@ install -m 644 files/ap-setup.service "${ROOTFS_DIR}/etc/systemd/system/ap-setup
 on_chroot << EOF
 systemctl enable ap-setup.service
 EOF
+
+# Enable auto-login for the pi user - Required for plug and play
+install -d "${ROOTFS_DIR}/etc/systemd/system/getty@tty1.service.d"
+cat << EOF > "${ROOTFS_DIR}/etc/systemd/system/getty@tty1.service.d/autologin.conf"
+[Service]
+ExecStart=
+ExecStart=-/sbin/agetty --autologin pi --noclear %I \$TERM
+EOF
+
