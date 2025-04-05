@@ -66,3 +66,40 @@ We will be able to insert it in between the other stages using the STAGE_LIST
 2. in the config file, add or modify the STAGE_LIST="stage0 stage1 stage2 <your stage here>" to include your new custom stage
 2. Add a prerun.sh file to the new directory
 4. When adding .sh files, you must run the following command LOCALLY BEFORE YOU PUSH TO GITHUB in order to make the files executable chmod +x <File PAth> (This makes it executable)
+
+# WIFI
+#This configuration will
+# 1. Read the config and preload the config to wpa_supplicant at /etc/wpa_aupplicant
+# 2.Attempt to auto connec to the wifi network specified in the configuration
+# 3. Get an ip address for the device via DHCP
+#. Be avaliable for SSH using raspberrypi.local on your router assigned IP
+
+
+# WIFI BOOT PROCESS
+WIFI Credentials passed in via ou're going with a Wi-Fi Access Point + captive web form, which is:
+✅ Universally supported (iOS, Android, Mac, Windows, etc.)
+✅ Scalable (flash and deploy 100s of devices with same image)
+✅ The same model used by:
+Smart bulbs (TP-Link, Wyze, Tuya)
+Cameras (Ring, Blink)
+Speakers (Sonos, Bose)
+ESP32/ESPHome boards
+Commercial IoT devices
+
+ our 00-ap-setup will 
+ 🔌 Start a Wi-Fi network
+🌐 Serve a web form
+📶 Let any phone send credentials
+💾 Save Wi-Fi config and reboot
+
+
+
+
+On boot, check if Wi-Fi credentials already exist.
+✅ If they do exist → connect to Wi-Fi (you already built this).
+❌ If they don’t exist → enable Bluetooth, advertise itself, and wait for a phone to connect and send Wi-Fi info.
+🧠 Store the credentials → write to /etc/wpa_supplicant/wpa_supplicant.conf
+🔁 Reboot or restart networking → Pi auto-connects.
+
+### WIFI Reboots - TODO LATER
+A button will be placed on the device which will execute a script to delete the config file at /etc/wpa_supplicant/wpa_supplicant.conf, then restart the device so that it will then attempt to prompt the user to 

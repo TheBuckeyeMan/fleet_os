@@ -15,4 +15,4 @@ DEPLOY_DIR=./deploy          # Output directory for your .img file
 DEPLOY_COMPRESSION=none         # Compress final image to .zip
 WPA_COUNTRY=US               # Wi-Fi country code
 
-STAGE_LIST="stage0 stage1 stage2 connect-wifi" #Add your custom stage here in the order you want to execute
+STAGE_LIST="stage0 stage1 stage2 ap-setup-mode" #Add your custom stage here in the order you want to execute

@@ -1,0 +1,11 @@
+[Unit]
+Description=Wi-Fi Setup Access Point
+ConditionPathExists=!/boot/provisioned.flag
+After=network.target
+
+[Service]
+ExecStart=/usr/bin/python3 /usr/local/bin/setup-server.py
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
