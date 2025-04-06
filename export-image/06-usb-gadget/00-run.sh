@@ -10,6 +10,9 @@ elif [ -f "${BOOT_DIR}/config.txt" ]; then
   echo "dtoverlay=dwc2" >> "${BOOT_DIR}/config.txt"
 fi
 
+# Ensure /etc/modules exists
+mkdir -p "${ROOTFS_DIR}/etc"
+
 # Append modules
 echo "dwc2" >> "${ROOTFS_DIR}/etc/modules"
 echo "g_ether" >> "${ROOTFS_DIR}/etc/modules"
