@@ -18,6 +18,9 @@ install -m 644 files/dnsmasq.conf "${ROOTFS_DIR}/etc/dnsmasq.conf"
 install -m 755 files/setup-server.py "${ROOTFS_DIR}/usr/local/bin/setup-server.py"
 install -m 644 files/ap-setup.service "${ROOTFS_DIR}/etc/systemd/system/ap-setup.service"
 
+#Make python file executable
+chmod +x "${ROOTFS_DIR}/usr/local/bin/setup-server.py"
+
 # Enable our custom AP + server service
 on_chroot << EOF
 systemctl enable ap-setup.service

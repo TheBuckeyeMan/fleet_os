@@ -5,7 +5,7 @@ Requires=network.target
 
 [Service]
 Type=simple
-ExecStart=/usr/bin/python33 /usr/local/bin/setup-server.py
+ExecStart=/usr/bin/python3 /usr/local/bin/setup-server.py
 Restart=on-failure
 StandardOutput=journal
 StandardError=journal
