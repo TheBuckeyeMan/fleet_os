@@ -1,28 +1,31 @@
 #!/bin/bash -e
 
-BOOT_DIR="${ROOTFS_DIR}/boot"
-FIRMWARE_DIR="${ROOTFS_DIR}/boot/firmware"
+# Ensure the boot directories exist
+mkdir -p "${ROOTFS_DIR}/boot"
+mkdir -p "${ROOTFS_DIR}/boot/firmware"
+mkdir -p "${ROOTFS_DIR}/etc"
 
 # Enable SSH over USB (gadget mode)
-if [ -f "${FIRMWARE_DIR}/config.txt" ]; then
-  echo "dtoverlay=dwc2" >> "${FIRMWARE_DIR}/config.txt"
-elif [ -f "${BOOT_DIR}/config.txt" ]; then
-  echo "dtoverlay=dwc2" >> "${BOOT_DIR}/config.txt"
+if [ -f "${ROOTFS_DIR}/boot/firmware/config.txt" ]; then
+  echo "dtoverlay=dwc2" >> "${ROOTFS_DIR}/boot/firmware/config.txt"
+elif [ -f "${ROOTFS_DIR}/boot/config.txt" ]; then
+  echo "dtoverlay=dwc2" >> "${ROOTFS_DIR}/boot/config.txt"
 fi
-
-# Ensure /etc/modules exists
-mkdir -p "${ROOTFS_DIR}/etc"
 
 # Append modules
 echo "dwc2" >> "${ROOTFS_DIR}/etc/modules"
 echo "g_ether" >> "${ROOTFS_DIR}/etc/modules"
 
 # Enable USB ethernet gadget
-if [ -f "${FIRMWARE_DIR}/cmdline.txt" ]; then
-  sed -i 's/\(.*rootwait\)/\1 modules-load=dwc2,g_ether/' "${FIRMWARE_DIR}/cmdline.txt"
-elif [ -f "${BOOT_DIR}/cmdline.txt" ]; then
-  sed -i 's/\(.*rootwait\)/\1 modules-load=dwc2,g_ether/' "${BOOT_DIR}/cmdline.txt"
+if [ -f "${ROOTFS_DIR}/boot/firmware/cmdline.txt" ]; then
+  sed -i 's/\(.*rootwait\)/\1 modules-load=dwc2,g_ether/' "${ROOTFS_DIR}/boot/firmware/cmdline.txt"
+elif [ -f "${ROOTFS_DIR}/boot/cmdline.txt" ]; then
+  sed -i 's/\(.*rootwait\)/\1 modules-load=dwc2,g_ether/' "${ROOTFS_DIR}/boot/cmdline.txt"
 fi
 
-# Enable SSH
-touch "${FIRMWARE_DIR}/ssh" || touch "${BOOT_DIR}/ssh"
+# Enable SSH — only touch it if the correct directory exists
+if [ -d "${ROOTFS_DIR}/boot/firmware" ]; then
+  touch "${ROOTFS_DIR}/boot/firmware/ssh"
+elif [ -d "${ROOTFS_DIR}/boot" ]; then
+  touch "${ROOTFS_DIR}/boot/ssh"
+fi
