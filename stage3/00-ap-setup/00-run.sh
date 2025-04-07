@@ -6,6 +6,10 @@ apt-get update
 apt-get install -y hostapd dnsmasq python3-flask
 EOF
 
+
+echo 'DAEMON_CONF="/etc/hostapd/hostapd.conf"' >> "${ROOTFS_DIR}/etc/default/hostapd"
+
+
 # Disable defaults so we use our configs
 on_chroot << EOF
 systemctl disable hostapd
@@ -33,4 +37,6 @@ cat << EOF > "${ROOTFS_DIR}/etc/systemd/system/getty@tty1.service.d/autologin.co
 ExecStart=
 ExecStart=-/sbin/agetty --autologin pi --noclear %I \$TERM
 EOF
+
+
 
