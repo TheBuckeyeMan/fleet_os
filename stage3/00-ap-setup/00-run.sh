@@ -10,11 +10,11 @@ EOF
 echo 'DAEMON_CONF="/etc/hostapd/hostapd.conf"' >> "${ROOTFS_DIR}/etc/default/hostapd"
 
 
-# Disable defaults so we use our configs
 on_chroot << EOF
-systemctl disable hostapd
-systemctl disable dnsmasq
+systemctl unmask hostapd
+systemctl enable hostapd
 EOF
+
 
 # Copy our config and scripts
 install -m 644 files/hostapd.conf "${ROOTFS_DIR}/etc/hostapd/hostapd.conf"
