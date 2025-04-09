@@ -38,5 +38,14 @@ ExecStart=
 ExecStart=-/sbin/agetty --autologin pi --noclear %I \$TERM
 EOF
 
+# Force predictable interface name (wlan0)
+sed -i 's/$/ net.ifnames=0/' "${ROOTFS_DIR}/boot/cmdline.txt"
+
+# Disable wpa_supplicant so wlan0 isn't claimed at boot
+on_chroot << EOF
+systemctl disable wpa_supplicant
+EOF
+
+echo -e "interface wlan0\n    static ip_address=192.168.4.1/24" >> "${ROOTFS_DIR}/etc/dhcpcd.conf"
 
 
