@@ -1,0 +1,12 @@
+[Unit]
+Description=Force wlan0 into AP Mode Before hostapd
+After=multi-user.target
+Before=hostapd.service
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/force-ap-mode.sh
+RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target
