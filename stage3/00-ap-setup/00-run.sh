@@ -14,6 +14,8 @@ on_chroot << EOF
 systemctl unmask hostapd
 systemctl enable hostapd
 systemctl enable dnsmasq
+systemctl enable force-ap-mode.service
+systemctl start hostapd
 EOF
 
 # Copy configs + scripts
@@ -47,4 +49,5 @@ systemctl disable wpa_supplicant
 EOF
 
 # Static IP for wlan0
-echo -e "interface wlan0\n    static ip_address=192.168.4.1/24" >> "${ROOTFS_DIR}/etc/dhcpcd.conf"
+echo -e "interface wlan0\n    static ip_address=192.168.4.1/24\n    nohook wpa_supplicant" >> "${ROOTFS_DIR}/etc/dhcpcd.conf"
+
