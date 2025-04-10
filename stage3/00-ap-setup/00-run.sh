@@ -17,6 +17,14 @@ install -m 644 files/ap-setup.service "${ROOTFS_DIR}/etc/systemd/system/ap-setup
 install -m 755 files/force-ap-mode.sh "${ROOTFS_DIR}/usr/local/bin/force-ap-mode.sh"
 install -m 644 files/force-ap-mode.service "${ROOTFS_DIR}/etc/systemd/system/force-ap-mode.service"
 
+
+# Force NetworkManager to ignore wlan0
+mkdir -p "${ROOTFS_DIR}/etc/NetworkManager/conf.d"
+cat << EOF > "${ROOTFS_DIR}/etc/NetworkManager/conf.d/ignore-wlan0.conf"
+[keyfile]
+unmanaged-devices=interface-name:wlan0
+EOF
+
 # Unmask + enable system services AFTER files are copied
 on_chroot << EOF
 systemctl unmask hostapd
