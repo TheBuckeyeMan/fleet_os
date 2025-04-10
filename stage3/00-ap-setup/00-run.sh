@@ -9,15 +9,6 @@ EOF
 # Configure hostapd to use custom config
 echo 'DAEMON_CONF="/etc/hostapd/hostapd.conf"' >> "${ROOTFS_DIR}/etc/default/hostapd"
 
-# Unmask and enable services
-on_chroot << EOF
-systemctl unmask hostapd
-systemctl enable hostapd
-systemctl enable dnsmasq
-systemctl enable force-ap-mode.service
-systemctl start hostapd
-EOF
-
 # Copy configs + scripts
 install -m 644 files/hostapd.conf "${ROOTFS_DIR}/etc/hostapd/hostapd.conf"
 install -m 644 files/dnsmasq.conf "${ROOTFS_DIR}/etc/dnsmasq.conf"
@@ -26,10 +17,14 @@ install -m 644 files/ap-setup.service "${ROOTFS_DIR}/etc/systemd/system/ap-setup
 install -m 755 files/force-ap-mode.sh "${ROOTFS_DIR}/usr/local/bin/force-ap-mode.sh"
 install -m 644 files/force-ap-mode.service "${ROOTFS_DIR}/etc/systemd/system/force-ap-mode.service"
 
-# Enable your services
+# Unmask + enable system services AFTER files are copied
 on_chroot << EOF
+systemctl unmask hostapd
+systemctl enable hostapd
+systemctl enable dnsmasq
 systemctl enable ap-setup.service
 systemctl enable force-ap-mode.service
+systemctl disable wpa_supplicant
 EOF
 
 # Auto-login for Pi user
