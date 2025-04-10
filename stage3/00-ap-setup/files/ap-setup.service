@@ -4,9 +4,13 @@ After=network.target
 Requires=network.target
 
 [Service]
-Type=simple
-ExecStart=/usr/bin/python3 /usr/local/bin/setup-server.py
-Restart=on-failure
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/bin/bash -c '\
+  systemctl start hostapd; \
+  systemctl start dnsmasq; \
+  /usr/bin/python3 /usr/local/bin/setup-server.py & \
+  wait'
 StandardOutput=journal
 StandardError=journal
 
