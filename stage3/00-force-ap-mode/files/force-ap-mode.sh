@@ -12,7 +12,7 @@ while ! ip link show wlan0 &>/dev/null; do
   fi
 done
 
-# Force AP mode clean
+# Force AP Mode clean
 ip link set wlan0 down || true
 iw dev wlan0 set type __ap || true
 ip link set wlan0 up || true
