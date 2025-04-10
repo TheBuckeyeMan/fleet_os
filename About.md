@@ -3,6 +3,18 @@
 # ABout
 Think of the Raspberry Pi OS as a pipeline for different things that need to occure in the OS, outlined in each stage. Each stage represents the following
 
+Get WIFI Credentials wil be baked into the OS
+Install and/or update docker
+
+Logic to get the certificate will exist in a docker container and be pulled to the device and run. It will then get a new cert in the event that the cert doesnt exist and the device is not yet set up
+After cert is aquired, then we will need to shut down the docker container and remove it from the list of images as well as containers
+pull the new docker images for the logic for the device itself
+run the container that has the logic to capture the sensor data, authenticate with IoT Core, as well as send the MQTT Requests to IoT Core
+
+## Updating
+### OS
+The OS itself(Including tasks to get the wifi crednetials) are not needed
+
 # File Structure
 fleet_os-1
 ├── config                # 👈 your build configuration (set IMG_NAME, RELEASE, etc.)
