@@ -1,7 +1,7 @@
 [Unit]
 Description=Access Point Setup Service
-After=network.target
-Requires=network.target
+After=multi-user.target
+Before=hostapd.service
 
 [Service]
 Type=simple
