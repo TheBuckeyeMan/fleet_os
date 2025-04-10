@@ -7,6 +7,10 @@ apt-get install -y hostapd
 
 echo 'DAEMON_CONF="/etc/hostapd/hostapd.conf"' >> "${ROOTFS_DIR}/etc/default/hostapd"
 
+# Create the directory if not exists
+install -d "${ROOTFS_DIR}/etc/hostapd"
+
+# Now install the config
 install -m 644 files/hostapd.conf "${ROOTFS_DIR}/etc/hostapd/hostapd.conf"
 
 on_chroot << EOF
