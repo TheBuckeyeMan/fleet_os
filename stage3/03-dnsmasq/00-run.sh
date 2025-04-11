@@ -5,7 +5,7 @@ echo "[Stage 03-dnsmasq - START] $(date)" >> "${ROOTFS_DIR}/boot/firmware/build-
 # Update and Install dnsmasq
 on_chroot << EOF
 apt-get update
-apt-get install -y dnsmasq
+apt-get install -y dnsmasq-base
 EOF
 
 # Copy over dnsmasq config
