@@ -1,10 +1,11 @@
 [Unit]
-Description=dnsmasq DHCP and DNS server
-After=network.target
+Description=Force wlan0 into AP Mode Before hostapd
+Before=hostapd.service
 
 [Service]
-ExecStart=/usr/sbin/dnsmasq -k
-Restart=on-failure
+Type=oneshot
+ExecStart=/usr/local/bin/force-ap-mode.sh
+RemainAfterExit=yes
 
 [Install]
 WantedBy=multi-user.target

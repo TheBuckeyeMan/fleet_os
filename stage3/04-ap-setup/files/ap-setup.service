@@ -1,7 +1,6 @@
 [Unit]
 Description=Access Point Setup Service
-After=multi-user.target
-Before=hostapd.service
+After=hostapd.service dnsmasq.service
 
 [Service]
 Type=simple

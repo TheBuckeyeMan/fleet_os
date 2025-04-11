@@ -1,6 +1,5 @@
 [Unit]
 Description=Force wlan0 into AP Mode Before hostapd
-After=multi-user.target
 Before=hostapd.service
 
 [Service]
