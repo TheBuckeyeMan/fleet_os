@@ -1,0 +1,10 @@
+[Unit]
+Description=dnsmasq DHCP and DNS server
+After=network.target
+
+[Service]
+ExecStart=/usr/sbin/dnsmasq -k
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
