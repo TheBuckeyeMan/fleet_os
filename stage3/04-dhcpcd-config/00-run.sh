@@ -2,6 +2,11 @@
 
 echo "[Stage 04-dhcpcd-config - START] $(date)" >> "${ROOTFS_DIR}/boot/firmware/build-stage-logs.txt"
 
+on_chroot << EOF
+apt-get update
+apt-get install -y dhcpcd5
+EOF
+
 # Ensure directory
 install -d "${ROOTFS_DIR}/etc"
 

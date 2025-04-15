@@ -1,11 +1,11 @@
 [Unit]
 Description=Force wlan0 into AP Mode Before hostapd
-Before=hostapd.service
+After=network.target dhcpcd.service
+Requires=dhcpcd.service
 
 [Service]
-Type=oneshot
-ExecStart=/usr/local/bin/force-ap-mode.sh
-RemainAfterExit=yes
+ExecStart=/usr/bin/bash /usr/local/bin/force-ap-mode.sh
+RemainAfterExit=true
 
 [Install]
 WantedBy=multi-user.target
