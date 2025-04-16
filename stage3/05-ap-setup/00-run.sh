@@ -4,7 +4,7 @@ echo "[ap-setup - START] $(date)" >> "${ROOTFS_DIR}/boot/firmware/build-stage-lo
 on_chroot << EOF
 apt-get update
 apt-get install -y python3-flask
-apt-get install -y dhcpcd5
+apt-get install -y dhcpcd5=1:8.1.2-1+rpt2
 apt-mark manual dhcpcd5
 EOF
 

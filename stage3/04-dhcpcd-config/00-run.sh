@@ -4,7 +4,8 @@ echo "[Stage 04-dhcpcd-config - START] $(date)" >> "${ROOTFS_DIR}/boot/firmware/
 
 on_chroot << EOF
 apt-get update
-apt-get install -y dhcpcd5
+apt-get install -y dhcpcd5=1:8.1.2-1+rpt2
+apt-mark manual dhcpcd5
 EOF
 
 # Ensure directory
