@@ -4,6 +4,7 @@ echo "[ap-setup - START] $(date)" >> "${ROOTFS_DIR}/boot/firmware/build-stage-lo
 on_chroot << EOF
 apt-get update
 apt-get install -y python3-flask
+apt-get install -y dhcpcd5
 EOF
 
 install -m 755 files/setup-server.py "${ROOTFS_DIR}/usr/local/bin/setup-server.py"

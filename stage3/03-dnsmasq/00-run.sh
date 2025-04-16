@@ -5,7 +5,7 @@ echo "[Stage 03-dnsmasq - START] $(date)" >> "${ROOTFS_DIR}/boot/firmware/build-
 # Install dnsmasq (force full version over base-only install)
 on_chroot << EOF
 apt-get update
-apt-get install -y --allow-downgrades dnsmasq
+apt-get install -y dnsmasq
 EOF
 
 # Copy config
