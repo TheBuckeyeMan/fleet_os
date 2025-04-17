@@ -1,13 +1,13 @@
 [Unit]
-Description=Flask AP Setup Server
-After=network.target
+Description=Flask Wi-Fi Credential Setup Server
+After=network-online.target
+Wants=network-online.target
 
 [Service]
 ExecStart=/usr/bin/python3 /usr/local/bin/setup-server.py
 Restart=always
-StandardOutput=inherit
-StandardError=inherit
-WorkingDirectory=/usr/local/bin
+StandardOutput=journal
+StandardError=journal
 
 [Install]
 WantedBy=multi-user.target
