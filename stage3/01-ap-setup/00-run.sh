@@ -19,4 +19,3 @@ systemctl enable ap-setup.service
 EOF
 
 echo "[Stage 01-ap-setup - END] $(date)" >> "${ROOTFS_DIR}/boot/firmware/build-stage-logs.txt"
-
