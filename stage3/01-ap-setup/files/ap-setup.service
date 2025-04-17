@@ -1,0 +1,11 @@
+[Unit]
+Description=Flask Wi-Fi Setup Server
+After=network-online.target NetworkManager.service
+Wants=network-online.target
+
+[Service]
+ExecStart=/usr/bin/python3 /usr/local/bin/setup-server.py
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
