@@ -1,13 +1,12 @@
 [connection]
 id=ap-mode
-uuid=6c0b2f8d-bf8a-48d5-92f3-4373c1a662d5
 type=wifi
 interface-name=wlan0
 autoconnect=true
 
 [wifi]
-mode=ap
 ssid=PiSetup
+mode=ap
 band=bg
 channel=6
 
@@ -16,8 +15,7 @@ key-mgmt=wpa-psk
 psk=raspberry
 
 [ipv4]
-method=manual
-addresses=192.168.4.1/24
+method=shared
 
 [ipv6]
 method=ignore
