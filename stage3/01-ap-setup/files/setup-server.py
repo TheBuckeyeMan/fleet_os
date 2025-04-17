@@ -1,30 +1,42 @@
+# --- stage3/01-ap-setup/files/setup-server.py ---
+from flask import Flask, request, render_template_string
+import os
 import subprocess
-from flask import Flask, request
 
 app = Flask(__name__)
 
-@app.route("/", methods=["GET", "POST"])
-def wifi_setup():
-    if request.method == "POST":
-        ssid = request.form["ssid"]
-        password = request.form["password"]
+HTML_FORM = """
+<html><body>
+<h2>Enter WiFi Credentials</h2>
+<form method="POST">
+SSID: <input type="text" name="ssid"><br>
+Password: <input type="password" name="password"><br>
+<input type="submit" value="Connect">
+</form>
+</body></html>
+"""
 
-        subprocess.run([
-            "nmcli", "device", "disconnect", "wlan0"
-        ])
-        subprocess.run([
-            "nmcli", "device", "wifi", "connect", ssid,
-            "password", password, "ifname", "wlan0"
-        ])
-        return "Wi-Fi setup complete. Rebooting..."
-    
-    return '''
-        <form method="post">
-            SSID: <input name="ssid"><br>
-            Password: <input name="password" type="password"><br>
-            <input type="submit">
-        </form>
-    '''
+@app.route('/', methods=['GET', 'POST'])
+def index():
+    if request.method == 'POST':
+        ssid = request.form.get('ssid')
+        password = request.form.get('password')
+        if ssid and password:
+            wpa_supplicant = f"""
+ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev
+update_config=1
+country=US
 
-if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=80)
+network={{
+    ssid=\"{ssid}\"
+    psk=\"{password}\"
+}}"""
+            with open('/boot/firmware/wpa_supplicant.conf', 'w') as f:
+                f.write(wpa_supplicant)
+            subprocess.run(['sync'])
+            os.system('reboot')
+        return "Rebooting with new config..."
+    return HTML_FORM
+
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=80)

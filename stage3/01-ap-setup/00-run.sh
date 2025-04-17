@@ -1,23 +1,19 @@
 #!/bin/bash -e
 
-echo "[AP-SETUP] Installing Flask + setting up AP..." >> "${ROOTFS_DIR}/boot/firmware/build-stage-logs.txt"
+echo "[Stage 3 - 01-ap-setup - START] $(date)" >> /boot/firmware/build-stage-logs.txt
 
 on_chroot << EOF
 apt-get update
-apt-get install -y python3-flask dnsmasq network-manager
-
-# Create AP mode using NetworkManager
-nmcli connection add type wifi ifname wlan0 con-name ap-mode autoconnect yes ssid PiSetup
-nmcli connection modify ap-mode wifi.mode ap
-nmcli connection modify ap-mode 802-11-wireless.band bg
-nmcli connection modify ap-mode 802-11-wireless.channel 6
-nmcli connection modify ap-mode wifi-sec.key-mgmt wpa-psk
-nmcli connection modify ap-mode wifi-sec.psk "raspberry"
-nmcli connection modify ap-mode ipv4.addresses 192.168.4.1/24
-nmcli connection modify ap-mode ipv4.method manual
-nmcli connection up ap-mode
+apt-get install -y python3-flask
 EOF
 
+# Copy python server and service
+install -m 755 files/setup-server.py "$ROOTFS_DIR/usr/local/bin/setup-server.py"
+install -m 644 files/ap-setup.service "$ROOTFS_DIR/etc/systemd/system/ap-setup.service"
 
-echo "[ap-setup - END] $(date)" >> "${ROOTFS_DIR}/boot/firmware/build-stage-logs.txt"
+# Enable the service
+on_chroot << EOF
+systemctl enable ap-setup.service
+EOF
 
+echo "[Stage 3 - 01-ap-setup - END] $(date)" >> /boot/firmware/build-stage-logs.txt
