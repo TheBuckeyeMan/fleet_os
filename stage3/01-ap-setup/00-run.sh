@@ -25,7 +25,6 @@ install -D -m 600 files/ap-mode.nmconnection "${ROOTFS_DIR}/etc/NetworkManager/s
 # Ensure proper permissions and reload connection
 on_chroot << EOF
 chmod 600 /etc/NetworkManager/system-connections/ap-mode.nmconnection
-nmcli connection reload
 EOF
 
 # Log build end
