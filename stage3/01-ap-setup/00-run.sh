@@ -1,6 +1,8 @@
 #!/bin/bash -e
 
-echo "[Stage 3 - 01-ap-setup - START] $(date)" >> /boot/firmware/build-stage-logs.txt
+mkdir -p "${ROOTFS_DIR}/boot/firmware"
+echo "[Stage 01-ap-setup - START] $(date)" >> "${ROOTFS_DIR}/boot/firmware/build-stage-logs.txt"
+
 
 on_chroot << EOF
 apt-get update
@@ -16,4 +18,5 @@ on_chroot << EOF
 systemctl enable ap-setup.service
 EOF
 
-echo "[Stage 3 - 01-ap-setup - END] $(date)" >> /boot/firmware/build-stage-logs.txt
+echo "[Stage 01-ap-setup - END] $(date)" >> "${ROOTFS_DIR}/boot/firmware/build-stage-logs.txt"
+

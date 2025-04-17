@@ -1,5 +1,5 @@
 #!/bin/bash -e
-
+mkdir -p "${ROOTFS_DIR}/boot/firmware"
 echo "[${0}] START --- $(date)" >> "${ROOTFS_DIR}/boot/firmware/build-stage-logs.txt"
 
 # Enable auto-login for the pi user
