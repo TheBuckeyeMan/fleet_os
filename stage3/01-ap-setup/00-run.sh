@@ -7,7 +7,7 @@ echo "[Stage 01-ap-setup - START] $(date)" >> "${ROOTFS_DIR}/boot/firmware/build
 # Install Flask
 on_chroot << EOF
 apt-get update
-apt-get install -y python3-flask dnsmasq
+apt-get install -y python3-flask
 EOF
 
 # Copy Flask server and systemd service
@@ -27,13 +27,12 @@ on_chroot << EOF
 chmod 600 /etc/NetworkManager/system-connections/ap-mode.nmconnection
 EOF
 
-# Configure DNS hijack for "setup"
-install -D -m 644 files/dnsmasq.conf "${ROOTFS_DIR}/etc/dnsmasq.conf"
+# Ensure DNS hijack works (NetworkManager internal dnsmasq)
+install -d "${ROOTFS_DIR}/etc/NetworkManager/dnsmasq.d"
+install -m 644 files/setup.conf "${ROOTFS_DIR}/etc/NetworkManager/dnsmasq.d/setup.conf"
 
-# Enable dnsmasq
-on_chroot << EOF
-systemctl enable dnsmasq
-EOF
+install -d "${ROOTFS_DIR}/etc/NetworkManager/conf.d"
+echo -e "[main]\ndns=dnsmasq" > "${ROOTFS_DIR}/etc/NetworkManager/conf.d/use-dnsmasq.conf"
 
 # Log build end
 echo "[Stage 01-ap-setup - END] $(date)" >> "${ROOTFS_DIR}/boot/firmware/build-stage-logs.txt"
