@@ -1,6 +1,4 @@
-# --- stage3/01-ap-setup/files/setup-server.py ---
 from flask import Flask, request, render_template_string
-import os
 import subprocess
 
 app = Flask(__name__)
@@ -22,21 +20,32 @@ def index():
         ssid = request.form.get('ssid')
         password = request.form.get('password')
         if ssid and password:
-            wpa_supplicant = f"""
-ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev
-update_config=1
-country=US
-
-network={{
-    ssid=\"{ssid}\"
-    psk=\"{password}\"
-}}"""
-            with open('/boot/firmware/wpa_supplicant.conf', 'w') as f:
-                f.write(wpa_supplicant)
-            subprocess.run(['sync'])
-            os.system('reboot')
-        return "Rebooting with new config..."
+            result = subprocess.run([
+                "nmcli", "device", "wifi", "connect", ssid, "password", password
+            ], capture_output=True, text=True)
+            if result.returncode == 0:
+                return f"""
+                <html><body>
+                <h2>✅ Connected to {ssid}!</h2>
+                <p>The device will now reboot and try to join your WiFi.</p>
+                <pre>{result.stdout}</pre>
+                <script>setTimeout(() => fetch('/reboot'), 3000);</script>
+                </body></html>
+                """
+            else:
+                return f"""
+                <html><body>
+                <h2>❌ Failed to connect to {ssid}</h2>
+                <pre>{result.stderr}</pre>
+                <a href="/">Try again</a>
+                </body></html>
+                """
     return HTML_FORM
+
+@app.route('/reboot')
+def reboot():
+    subprocess.Popen(['reboot'])
+    return "Rebooting..."
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=80)
