@@ -1,7 +1,29 @@
 from flask import Flask, request, render_template_string
 import subprocess
+import os
+import threading
+import time
+import RPi.GPIO as GPIO
 
 app = Flask(__name__)
+
+LED_PIN = 11
+GPIO.setmode(GPIO.BCM)
+GPIO.setup(LED_PIN, GPIO.OUT)
+
+blinking = True
+
+def blink_led():
+    while blinking:
+        GPIO.output(LED_PIN, GPIO.HIGH)
+        time.sleep(0.3)
+        GPIO.output(LED_PIN, GPIO.LOW)
+        time.sleep(0.3)
+
+# Start Blinking Thread
+blink_thread = threading.Thread(target=blink_led)
+blink_thread.start()
+
 
 HTML_FORM = """
 <html><body>
@@ -24,6 +46,8 @@ def index():
                 "nmcli", "device", "wifi", "connect", ssid, "password", password
             ], capture_output=True, text=True)
             if result.returncode == 0:
+                blinking = False
+                GPIO.output(LED_PIN, GPIO.LOW)
                 return f"""
                 <html><body>
                 <h2>✅ Connected to {ssid}!</h2>
