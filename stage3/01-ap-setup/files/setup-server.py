@@ -7,7 +7,28 @@ import RPi.GPIO as GPIO
 
 app = Flask(__name__)
 
-LED_PIN = 11
+
+#Check if WIFI credentials already exist
+def is_wifi_connected():
+    try:
+        result = subprocess.run(
+            ["nmcli", "-t", "-f", "DEVICE,STATE", "device"],
+            capture_output=True, text=True
+        )
+        for line in result.stdout.strip().split('\n'):
+            device, state = line.split(":")
+            if device == "wlan0" and state == "connected":
+                return True
+    except Exception as e:
+        print(f"Error checking WiFi status: {e}")
+    return False
+
+# If wifi credentials exist, exit the script do not display form to enter new credentials
+if is_wifi_connected():
+    print("WiFi credentials already set. Exiting...")
+    exit(0)
+
+LED_PIN = 17
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(LED_PIN, GPIO.OUT)
 
@@ -27,12 +48,14 @@ blink_thread.start()
 
 HTML_FORM = """
 <html><body>
-<h2>Enter WiFi Credentials</h2>
+<div>
+<h2>Enter Device WiFi Credentials</h2>
 <form method="POST">
 SSID: <input type="text" name="ssid"><br>
 Password: <input type="password" name="password"><br>
 <input type="submit" value="Connect">
 </form>
+</div>
 </body></html>
 """
 
