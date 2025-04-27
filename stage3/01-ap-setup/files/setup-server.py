@@ -16,9 +16,9 @@ blinking = True
 def blink_led():
     while blinking:
         GPIO.output(LED_PIN, GPIO.HIGH)
-        time.sleep(0.3)
+        time.sleep(0.8)
         GPIO.output(LED_PIN, GPIO.LOW)
-        time.sleep(0.3)
+        time.sleep(0.8)
 
 # Start Blinking Thread
 blink_thread = threading.Thread(target=blink_led)

@@ -34,5 +34,10 @@ install -m 644 files/setup.conf "${ROOTFS_DIR}/etc/NetworkManager/dnsmasq.d/setu
 install -d "${ROOTFS_DIR}/etc/NetworkManager/conf.d"
 echo -e "[main]\ndns=dnsmasq" > "${ROOTFS_DIR}/etc/NetworkManager/conf.d/use-dnsmasq.conf"
 
+# Force NetworkManager to use internal dnsmasq for AP DNS
+install -d "${ROOTFS_DIR}/etc/NetworkManager/conf.d"
+echo -e "[main]\ndns=dnsmasq" > "${ROOTFS_DIR}/etc/NetworkManager/conf.d/dns.conf"
+
+
 # Log build end
 echo "[Stage 01-ap-setup - END] $(date)" >> "${ROOTFS_DIR}/boot/firmware/build-stage-logs.txt"
