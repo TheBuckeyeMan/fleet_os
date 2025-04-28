@@ -7,11 +7,7 @@ import RPi.GPIO as GPIO
 
 app = Flask(__name__)
 
-@app.errorhandler(404)
-def page_not_found(e):
-    return HTML_FORM, 200
-
-
+# --- LED Setup ---
 LED_PIN = 17
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(LED_PIN, GPIO.OUT)
@@ -21,46 +17,55 @@ blinking = True
 def blink_led():
     while blinking:
         GPIO.output(LED_PIN, GPIO.HIGH)
-        time.sleep(0.8)
+        time.sleep(0.3)
         GPIO.output(LED_PIN, GPIO.LOW)
-        time.sleep(0.8)
+        time.sleep(0.3)
 
-# Start Blinking Thread
+# Start LED blinking thread
 blink_thread = threading.Thread(target=blink_led)
 blink_thread.start()
 
-
+# --- HTML Form ---
 HTML_FORM = """
-<html><body>
-<div>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>WiFi Setup</title>
+</head>
+<body>
+<div style="max-width:400px;margin:auto;text-align:center;">
 <h2>Enter Device WiFi Credentials</h2>
 <form method="POST">
-SSID: <input type="text" name="ssid"><br>
-Password: <input type="password" name="password"><br>
-<input type="submit" value="Connect">
+SSID: <input type="text" name="ssid" style="width:100%;"><br><br>
+Password: <input type="password" name="password" style="width:100%;"><br><br>
+<input type="submit" value="Connect" style="width:100%;padding:10px;">
 </form>
 </div>
-</body></html>
+</body>
+</html>
 """
+
+# --- Routes ---
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
+    global blinking
     if request.method == 'POST':
         ssid = request.form.get('ssid')
         password = request.form.get('password')
         if ssid and password:
+            # Try to connect
             result = subprocess.run([
                 "nmcli", "device", "wifi", "connect", ssid, "password", password
             ], capture_output=True, text=True)
             if result.returncode == 0:
                 blinking = False
                 GPIO.output(LED_PIN, GPIO.LOW)
-                # Disable AP setup service now that Wi-Fi is configured
-                subprocess.run(["systemctl", "disable", "ap-setup.service"])
+                # Disable AP mode (optional for future: disable ap-setup.service here too)
                 return f"""
                 <html><body>
                 <h2>✅ Connected to {ssid}!</h2>
-                <p>The device will now reboot and try to join your WiFi.</p>
+                <p>The device will now reboot and join your WiFi.</p>
                 <pre>{result.stdout}</pre>
                 <script>setTimeout(() => fetch('/reboot'), 3000);</script>
                 </body></html>
@@ -80,5 +85,11 @@ def reboot():
     subprocess.Popen(['reboot'])
     return "Rebooting..."
 
+# --- Captive Portal 404 Handler ---
+@app.errorhandler(404)
+def page_not_found(e):
+    return HTML_FORM, 200
+
+# --- Start Server ---
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=80)
