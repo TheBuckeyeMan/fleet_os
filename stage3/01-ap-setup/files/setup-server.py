@@ -85,7 +85,7 @@ def reboot():
     subprocess.Popen(['reboot'])
     return "Rebooting..."
 
-# --- Captive Portal 404 Handler ---
+# --- Captive Portal 404 Handler --- 
 @app.errorhandler(404)
 def page_not_found(e):
     return HTML_FORM, 200
