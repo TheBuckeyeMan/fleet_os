@@ -11,6 +11,7 @@ app = Flask(__name__)
 def page_not_found(e):
     return HTML_FORM, 200
 
+
 LED_PIN = 17
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(LED_PIN, GPIO.OUT)
