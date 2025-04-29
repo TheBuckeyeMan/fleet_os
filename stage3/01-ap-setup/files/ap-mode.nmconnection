@@ -16,6 +16,9 @@ psk=raspberry
 
 [ipv4]
 method=shared
+dns=10.42.0.1;
+dns-search=setup;
+ignore-auto-dns=true
 
 [ipv6]
 method=ignore
