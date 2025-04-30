@@ -1,4 +1,4 @@
-from flask import Flask, request, render_template_string
+from flask import Flask, request, render_template_string, redirect, url_for
 import subprocess
 import os
 import threading
@@ -48,6 +48,9 @@ Password: <input type="password" name="password" style="width:100%;"><br><br>
 # --- Routes ---
 
 @app.route('/', methods=['GET', 'POST'])
+@app.route("/generate_204")
+@app.route("/hotspot-detect.html")
+@app.route("/ncsi.txt")
 def index():
     global blinking
     if request.method == 'POST':
@@ -62,14 +65,7 @@ def index():
                 blinking = False
                 GPIO.output(LED_PIN, GPIO.LOW)
                 # Disable AP mode (optional for future: disable ap-setup.service here too)
-                return f"""
-                <html><body>
-                <h2>✅ Connected to {ssid}!</h2>
-                <p>The device will now reboot and join your WiFi.</p>
-                <pre>{result.stdout}</pre>
-                <script>setTimeout(() => fetch('/reboot'), 3000);</script>
-                </body></html>
-                """
+                return redirect(url_for('success', ssid=ssid))
             else:
                 return f"""
                 <html><body>
@@ -84,6 +80,17 @@ def index():
 def reboot():
     subprocess.Popen(['reboot'])
     return "Rebooting..."
+
+@app.route('/success')
+def success():
+    ssid = request.args.get('ssid', 'your WiFi')
+    return f"""
+    <html><body>
+    <h2>✅ Connected to {ssid}!</h2>
+    <p>The device will now reboot and join your WiFi.</p>
+    <script>setTimeout(() => fetch('/reboot'), 3000);</script>
+    </body></html>
+    """
 
 # --- Captive Portal 404 Handler --- 
 @app.errorhandler(404)
