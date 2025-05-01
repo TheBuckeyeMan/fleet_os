@@ -6,7 +6,7 @@ echo "[Stage 01-ap-setup - START] $(date)" >> "${ROOTFS_DIR}/boot/firmware/build
 
 #Add custom debug command
 install -m 755 files/collect-diagnostics-before.sh "${ROOTFS_DIR}/usr/local/bin/collect-diagnostics-before"
-install -m 755 files/collect-diagnostics-during.sh "${ROOTFS_DIR}/usr/local/bin/collect-diagnostics-during"
+install -m 755 files/collect-diagnostics-durring.sh "${ROOTFS_DIR}/usr/local/bin/collect-diagnostics-durring"
 install -m 755 files/collect-diagnostics-after.sh "${ROOTFS_DIR}/usr/local/bin/collect-diagnostics-after"
 
 # Install Flask
