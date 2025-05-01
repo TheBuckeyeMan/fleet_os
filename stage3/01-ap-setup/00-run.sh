@@ -4,6 +4,11 @@
 mkdir -p "${ROOTFS_DIR}/boot/firmware"
 echo "[Stage 01-ap-setup - START] $(date)" >> "${ROOTFS_DIR}/boot/firmware/build-stage-logs.txt"
 
+#Add custom debug command
+install -m 755 files/collect-diagnostics-before.sh "${ROOTFS_DIR}/usr/local/bin/collect-diagnostics-before"
+install -m 755 files/collect-diagnostics-during.sh "${ROOTFS_DIR}/usr/local/bin/collect-diagnostics-during"
+install -m 755 files/collect-diagnostics-after.sh "${ROOTFS_DIR}/usr/local/bin/collect-diagnostics-after"
+
 # Install Flask
 on_chroot << EOF
 apt-get update
@@ -36,8 +41,8 @@ echo -e "[main]\ndns=dnsmasq" > "${ROOTFS_DIR}/etc/NetworkManager/conf.d/dns.con
 install -d "${ROOTFS_DIR}/etc/NetworkManager/dnsmasq.d"
 install -m 644 files/setup.conf "${ROOTFS_DIR}/etc/NetworkManager/dnsmasq.d/setup.conf"
 
-install -d "${ROOTFS_DIR}/etc/NetworkManager/conf.d"
-echo -e "[main]\ndns=dnsmasq" > "${ROOTFS_DIR}/etc/NetworkManager/conf.d/use-dnsmasq.conf"
+# install -d "${ROOTFS_DIR}/etc/NetworkManager/conf.d"
+# echo -e "[main]\ndns=dnsmasq" > "${ROOTFS_DIR}/etc/NetworkManager/conf.d/use-dnsmasq.conf"
 
 # Log build end
 echo "[Stage 01-ap-setup - END] $(date)" >> "${ROOTFS_DIR}/boot/firmware/build-stage-logs.txt"

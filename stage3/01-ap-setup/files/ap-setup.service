@@ -1,7 +1,7 @@
 [Unit]
-Description=Flask Wi-Fi Credential Setup Server
-After=network-online.target
-Wants=network-online.target
+Description=Start Flask Setup Server
+After=network-online.target NetworkManager.service
+Requires=network-online.target
 
 [Service]
 ExecStart=/usr/bin/python3 /usr/local/bin/setup-server.py

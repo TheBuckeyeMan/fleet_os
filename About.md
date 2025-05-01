@@ -115,3 +115,8 @@ On boot, check if Wi-Fi credentials already exist.
 
 ### WIFI Reboots - TODO LATER
 A button will be placed on the device which will execute a script to delete the config file at /etc/wpa_supplicant/wpa_supplicant.conf, then restart the device so that it will then attempt to prompt the user to 
+
+
+
+# End User
+A Captive portal should open as soon as you connect the device, however, if it does not, please open your web browser and type in http://10.42.0.1
