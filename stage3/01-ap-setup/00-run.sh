@@ -32,7 +32,6 @@ on_chroot << EOF
 chmod 600 /etc/NetworkManager/system-connections/ap-mode.nmconnection
 EOF
 
-
 # Force NetworkManager to use internal dnsmasq for AP DNS
 install -d "${ROOTFS_DIR}/etc/NetworkManager/conf.d"
 echo -e "[main]\ndns=dnsmasq" > "${ROOTFS_DIR}/etc/NetworkManager/conf.d/dns.conf"

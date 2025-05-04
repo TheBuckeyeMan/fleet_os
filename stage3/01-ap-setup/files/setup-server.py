@@ -45,35 +45,43 @@ Password: <input type="password" name="password" style="width:100%;"><br><br>
 </html>
 """
 
+ATTEMPT_PAGE = """<html><body>
+<h2>✅ Credentials Received</h2>
+<p>Device is testing the connection now.<br>
+This page may close or disconnect as the device reboots.</p>
+</body></html>"""
+
 # --- Routes ---
 
-@app.route('/', methods=['GET', 'POST'])
+@app.route("/", methods=["GET", "POST"])
 @app.route("/generate_204")
 @app.route("/hotspot-detect.html")
 @app.route("/ncsi.txt")
 def index():
     global blinking
-    if request.method == 'POST':
-        ssid = request.form.get('ssid')
-        password = request.form.get('password')
+    if request.method == "POST":
+        ssid = request.form.get("ssid")
+        password = request.form.get("password")
         if ssid and password:
-            # Try to connect
-            result = subprocess.run([
-                "nmcli", "device", "wifi", "connect", ssid, "password", password
-            ], capture_output=True, text=True)
-            if result.returncode == 0:
-                blinking = False
-                GPIO.output(LED_PIN, GPIO.LOW)
-                # Disable AP mode (optional for future: disable ap-setup.service here too)
-                return redirect(url_for('success', ssid=ssid))
-            else:
-                return f"""
-                <html><body>
-                <h2>❌ Failed to connect to {ssid}</h2>
-                <pre>{result.stderr}</pre>
-                <a href="/">Try again</a>
-                </body></html>
-                """
+            blinking = False
+            GPIO.output(LED_PIN, GPIO.LOW)
+
+            # Run Wi-Fi connect + reboot after slight delay
+            def connect_and_reboot():
+                time.sleep(3)  # let browser render success first
+                result = subprocess.run([
+                    "nmcli", "device", "wifi", "connect", ssid, "password", password
+                ], capture_output=True, text=True)
+
+                if result.returncode == 0:
+                    with open("/boot/firmware/provisioned.txt", "w") as f:
+                        f.write(f"Connected to {ssid} at {time.ctime()}\n")
+                    subprocess.Popen(["reboot"])
+                else:
+                    print(f"WiFi connect failed:\n{result.stderr}")
+
+            threading.Thread(target=connect_and_reboot).start()
+            return ATTEMPT_PAGE
     return HTML_FORM
 
 @app.route('/reboot')
