@@ -1,5 +1,5 @@
 #!/bin/bash
-OUTPUT="/boot/firmware/diagnosis-during.txt"
+OUTPUT="/boot/firmware/diagnosis-before.txt"
 
 {
   echo "=== [DURING] NetworkManager Status ==="
