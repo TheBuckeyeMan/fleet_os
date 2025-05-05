@@ -13,6 +13,7 @@ install -m 755 files/collect-diagnostics-after.sh "${ROOTFS_DIR}/usr/local/bin/c
 on_chroot << EOF
 apt-get update
 apt-get install -y python3-flask
+apt-get install -y iptables
 EOF
 
 # Copy Flask server and systemd service
