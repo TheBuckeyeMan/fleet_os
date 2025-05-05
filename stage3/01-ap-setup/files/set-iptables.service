@@ -1,0 +1,11 @@
+[Unit]
+Description=Set iptables rules for captive portal
+After=NetworkManager.service
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/iptables-rules.sh
+RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target

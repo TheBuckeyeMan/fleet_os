@@ -29,7 +29,13 @@ OUTPUT="/boot/firmware/diagnosis-before.txt"
 
   echo -e "\n=== [BEFORE] iptables-rules.sh Contents ==="
   cat /usr/local/bin/iptables-rules.sh 2>/dev/null || echo "Script not found"
-  
+
+  echo -e "\n=== [BEFORE] systemd Services ==="
+  systemctl list-units --failed
+
+  echo -e "\n=== [BEFORE] IP Tables Rules (NAT) ==="
+  iptables -t nat -L -n -v
+
 } | sudo tee "$OUTPUT" > /dev/null
 
 echo "✅ BEFORE diagnostics written to $OUTPUT"

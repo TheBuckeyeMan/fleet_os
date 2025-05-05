@@ -45,26 +45,13 @@ install -m 644 files/setup.conf "${ROOTFS_DIR}/etc/NetworkManager/dnsmasq.d/setu
 
 echo "[Captive Portal - iptables NAT rules] $(date)" >> "${ROOTFS_DIR}/boot/firmware/build-stage-logs.txt"
 
-# Save persistent iptables rules
+# Install systemd unit and script
+install -m 644 files/set-iptables.service "${ROOTFS_DIR}/etc/systemd/system/set-iptables.service"
 install -m 755 files/iptables-rules.sh "${ROOTFS_DIR}/usr/local/bin/iptables-rules.sh"
 
 on_chroot << EOF
-chmod +x /usr/local/bin/iptables-rules.sh
-echo -e "[Unit]
-Description=Set iptables rules for captive portal
-After=network.target
-
-[Service]
-Type=oneshot
-ExecStart=/usr/local/bin/iptables-rules.sh
-RemainAfterExit=yes
-
-[Install]
-WantedBy=multi-user.target" > /etc/systemd/system/set-iptables.service
-
 systemctl enable set-iptables.service
 EOF
-
 
 
 # Log build end

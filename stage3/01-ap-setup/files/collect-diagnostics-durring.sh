@@ -23,6 +23,13 @@ OUTPUT="/boot/firmware/diagnosis-during.txt"
   echo -e "\n=== [DURING] Full iptables Dump ==="
   iptables-save
 
+  echo -e "\n=== [DURING] DNS Masquerading Rules ==="
+  iptables -t nat -L PREROUTING -n -v
+
+  echo -e "\n=== [DURING] Flask Listening Check ==="
+  curl -I http://10.42.0.1/generate_204 || echo "Flask not serving"
+
+
 } | sudo tee "$OUTPUT" > /dev/null
 
 echo "✅ DURING diagnostics written to $OUTPUT"

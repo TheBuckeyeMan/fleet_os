@@ -17,6 +17,13 @@ OUTPUT="/boot/firmware/diagnosis-after.txt"
   echo -e "\n=== [AFTER] Captive Portal Status ==="
   echo "GET /generate_204" | nc -w 3 10.42.0.1 80 || echo "Portal dead or WiFi changed"
 
+  echo -e "\n=== [AFTER] DNS and HTTP NAT Status ==="
+  iptables -t nat -L PREROUTING -n -v
+
+  echo -e "\n=== [AFTER] flask Process and Listening Port ==="
+  ps aux | grep flask
+  netstat -tulnp | grep :80
+
   echo "=== [AFTER]] FINAL BOOT LOGS ==="
   journalctl -b
 
