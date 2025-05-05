@@ -17,6 +17,12 @@ OUTPUT="/boot/firmware/diagnosis-during.txt"
   echo -e "\n=== [DURING] Listening Ports ==="
   sudo netstat -tulnp
 
+  echo -e "\n=== [DURING] iptables NAT Rules ==="
+  iptables -t nat -L -n -v
+
+  echo -e "\n=== [DURING] Full iptables Dump ==="
+  iptables-save
+
 } | sudo tee "$OUTPUT" > /dev/null
 
 echo "✅ DURING diagnostics written to $OUTPUT"
