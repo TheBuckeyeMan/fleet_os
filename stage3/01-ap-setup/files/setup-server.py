@@ -54,7 +54,6 @@ This page may close or disconnect as the device reboots.</p>
 # --- Routes ---
 
 @app.route("/", methods=["GET", "POST"])
-@app.route("/generate_204")
 @app.route("/hotspot-detect.html")
 @app.route("/ncsi.txt")
 def index():
@@ -103,7 +102,12 @@ def success():
 # --- Captive Portal 404 Handler --- 
 @app.errorhandler(404)
 def page_not_found(e):
-    return HTML_FORM, 200
+    return redirect("http://setup"), 302
+
+
+@app.route("/generate_204")
+def generate_204():
+    return "", 204
 
 # --- Start Server ---
 if __name__ == '__main__':

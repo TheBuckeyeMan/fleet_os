@@ -38,7 +38,9 @@ EOF
 
 # Force NetworkManager to use internal dnsmasq for AP DNS
 install -d "${ROOTFS_DIR}/etc/NetworkManager/conf.d"
-echo -e "[main]\ndns=dnsmasq" > "${ROOTFS_DIR}/etc/NetworkManager/conf.d/dns.conf"
+sed -i '/^\[main\]/a dns=dnsmasq' "${ROOTFS_DIR}/etc/NetworkManager/NetworkManager.conf"
+
+# echo -e "[main]\ndns=dnsmasq" > "${ROOTFS_DIR}/etc/NetworkManager/conf.d/dns.conf"
 
 # Ensure DNS hijack works (NetworkManager internal dnsmasq)
 install -d "${ROOTFS_DIR}/etc/NetworkManager/dnsmasq.d"
