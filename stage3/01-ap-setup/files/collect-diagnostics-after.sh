@@ -24,6 +24,15 @@ OUTPUT="/boot/firmware/diagnosis-after.txt"
   ps aux | grep flask
   netstat -tulnp | grep :80
 
+  echo -e "\n=== [AFTER] DNSMasq Leases ==="
+  sudo cat /var/lib/misc/dnsmasq.leases 2>/dev/null || echo "No leases file"
+
+  echo -e "\n=== [AFTER] DNSMasq Lease File ==="
+  cat /var/lib/misc/dnsmasq.leases 2>/dev/null || echo "No leases"
+
+  echo -e "\n=== [AFTER] DNS: External hijack test ==="
+  dig google.com @10.42.0.1
+
   echo "=== [AFTER]] FINAL BOOT LOGS ==="
   journalctl -b
 

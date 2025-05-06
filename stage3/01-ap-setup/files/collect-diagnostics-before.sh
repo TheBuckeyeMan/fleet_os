@@ -36,6 +36,15 @@ OUTPUT="/boot/firmware/diagnosis-before.txt"
   echo -e "\n=== [BEFORE] IP Tables Rules (NAT) ==="
   iptables -t nat -L -n -v
 
+  echo -e "\n=== [BEFORE] DNSMasq Override Test ==="
+  nslookup captive.apple.com 10.42.0.1 || dig captive.apple.com @10.42.0.1
+
+  echo -e "\n=== [BEFORE] DNS: Test captive.apple.com locally ==="
+  dig +short captive.apple.com @127.0.0.1
+
+  echo -e "\n=== [BEFORE] DNSMasq Status ==="
+  ps aux | grep dnsmasq
+
 } | sudo tee "$OUTPUT" > /dev/null
 
 echo "✅ BEFORE diagnostics written to $OUTPUT"

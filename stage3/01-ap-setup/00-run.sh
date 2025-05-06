@@ -7,6 +7,7 @@ echo "[Stage 01-ap-setup - START] $(date)" >> "${ROOTFS_DIR}/boot/firmware/build
 #Add custom debug command
 install -m 755 files/collect-diagnostics-before.sh "${ROOTFS_DIR}/usr/local/bin/collect-diagnostics-before"
 install -m 755 files/collect-diagnostics-durring.sh "${ROOTFS_DIR}/usr/local/bin/collect-diagnostics-durring"
+install -m 755 files/collect-diagnostics-live.sh "${ROOTFS_DIR}/usr/local/bin/collect-diagnostics-live.sh"
 install -m 755 files/collect-diagnostics-after.sh "${ROOTFS_DIR}/usr/local/bin/collect-diagnostics-after"
 
 # Install Flask
@@ -14,6 +15,8 @@ on_chroot << EOF
 apt-get update
 apt-get install -y python3-flask
 apt-get install -y iptables
+apt-get install -y dnsutils
+apt-get install -y tcpdump
 EOF
 
 # Copy Flask server and systemd service

@@ -29,6 +29,17 @@ OUTPUT="/boot/firmware/diagnosis-during.txt"
   echo -e "\n=== [DURING] Flask Listening Check ==="
   curl -I http://10.42.0.1/generate_204 || echo "Flask not serving"
 
+  echo -e "\n=== [DURING] DNSMasq Process ==="
+  ps aux | grep dnsmasq
+
+  echo -e "\n=== [DURING] Resolv.conf (active DNS servers) ==="
+  cat /etc/resolv.conf
+
+  echo -e "\n=== [DURING] DNS: Test captive.apple.com on local Pi IP ==="
+  dig +short captive.apple.com @10.42.0.1
+
+  echo -e "\n=== [DURING] DNS: Full Query Trace ==="
+  dig captive.apple.com @10.42.0.1 +trace +short
 
 } | sudo tee "$OUTPUT" > /dev/null
 
