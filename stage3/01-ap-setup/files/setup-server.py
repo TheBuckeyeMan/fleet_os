@@ -23,7 +23,6 @@ def blink_led():
         GPIO.output(LED_PIN, GPIO.LOW)
         time.sleep(0.3)
 
-
 # --- HTML Form ---
 HTML_FORM = """
 <html>
@@ -56,10 +55,10 @@ ATTEMPT_PAGE = """<html><body>
 <h2>✅ Credentials Received</h2>
 <p>Device is testing the connection now.</p><br>
 <h3>Successfully Connected?</h3>
-<p>If the device connects successfully, your LED will stop blinking and turn solid red after the reboot sequence takes place (<10 Seconds).</p>
+<p>If the device connects successfully, your LED will stop blinking and turn solid red after the reboot sequence takes place (<60 Seconds).</p><br>
+<p>This page may close or disconnect as the device reboots.</p>
 <h3>Device LED Still Blinking after 10 Seconds?</h3>
 <p>The Entered Wifi Credentials were incorrect or the device is unable to connect to the network. Please disconnect from the network, forget the network, and reconnect to the network</p>
-<p>This page may close or disconnect as the device reboots.</p>
 </body></html>"""
 
 # Get the device Serial Number Method
