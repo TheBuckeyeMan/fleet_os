@@ -21,10 +21,6 @@ def blink_led():
         GPIO.output(LED_PIN, GPIO.LOW)
         time.sleep(0.3)
 
-# Start LED blinking thread
-blink_thread = threading.Thread(target=blink_led)
-blink_thread.start()
-
 # --- HTML Form ---
 HTML_FORM = """
 <html>
@@ -63,7 +59,7 @@ def index():
         password = request.form.get("password")
         if ssid and password:
             blinking = False
-            GPIO.output(LED_PIN, GPIO.LOW)
+            GPIO.output(LED_PIN, GPIO.HIGH)
 
             # Run Wi-Fi connect + reboot after slight delay
             def connect_and_reboot():
@@ -111,4 +107,11 @@ def generate_204():
 
 # --- Start Server ---
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=80)
+    if os.path.exists("/boot/firmware/provisioned.txt"): # Check if Device already has wifi, if so, do not start flask server
+        print("[INFO] Device Wifi already connected — skipping Flask Server.")
+        GPIO.output(LED_PIN, GPIO.HIGH) # Turn the device wifi LED to always on.
+    else:
+        print("[INFO] No Connected to Wifi — starting pairing mode.")
+        blink_thread = threading.Thread(target=blink_led)
+        blink_thread.start()
+        app.run(host='0.0.0.0', port=80)
