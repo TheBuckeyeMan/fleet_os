@@ -48,7 +48,6 @@ This page may close or disconnect as the device reboots.</p>
 </body></html>"""
 
 # --- Routes ---
-
 @app.route("/", methods=["GET", "POST"])
 @app.route("/hotspot-detect.html", methods=["GET", "POST"])
 @app.route("/ncsi.txt", methods=["GET", "POST"])
@@ -59,8 +58,10 @@ def index():
         password = request.form.get("password")
         if ssid and password:
             blinking = False
-            GPIO.output(LED_PIN, GPIO.HIGH)
-
+            time.sleep(2)
+            GPIO.output(LED_PIN, GPIO.LOW)
+            monitor_thread = threading.Thread(target=monitor_wifi_led, daemon=True) # Start the real-time LED monitor
+            monitor_thread.start()
             # Run Wi-Fi connect + reboot after slight delay
             def connect_and_reboot():
                 time.sleep(3)  # let browser render success first
@@ -105,13 +106,29 @@ def page_not_found(e):
 def generate_204():
     return "", 204
 
+# TODO Break into seporate file 
+def monitor_wifi_led():
+    while True:
+        result = subprocess.run(
+            ["nmcli", "-t", "-f", "DEVICE,STATE", "device"],
+            capture_output=True, text=True
+        )
+        if "wlan0:connected" in result.stdout:
+            GPIO.output(LED_PIN, GPIO.HIGH)
+        else:
+            GPIO.output(LED_PIN, GPIO.LOW)
+        time.sleep(1)
+
 # --- Start Server ---
 if __name__ == '__main__':
-    if os.path.exists("/boot/firmware/provisioned.txt"): # Check if Device already has wifi, if so, do not start flask server
+    if os.path.exists("/boot/firmware/provisioned.txt"):
         print("[INFO] Device Wifi already connected — skipping Flask Server.")
-        GPIO.output(LED_PIN, GPIO.HIGH) # Turn the device wifi LED to always on.
+        monitor_thread = threading.Thread(target=monitor_wifi_led, daemon=True)
+        monitor_thread.start()
+        while True:
+            time.sleep(60)
     else:
-        print("[INFO] No Connected to Wifi — starting pairing mode.")
+        print("[INFO] Not connected to WiFi — starting pairing mode.")
         blink_thread = threading.Thread(target=blink_led)
         blink_thread.start()
         app.run(host='0.0.0.0', port=80)
