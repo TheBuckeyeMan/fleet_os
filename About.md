@@ -138,7 +138,7 @@ the following are the pin configuration on the Raspberry Pi
 
 ### Bread Board Configuration 
 ........ ----- 330R Resistor ------------------------------------------------- 330R Resistor ----- 
-........  GPIO BOARD PIN 11(BCM 17)                                          RED LED Long LEG
+........  GPIO BOARD PIN 11(BCM 17)                                           RED LED Long LEG
 ........                                                                                           RED LED Short Leg
 ........                                                                                           Ground BOARD PIN 9                 
 

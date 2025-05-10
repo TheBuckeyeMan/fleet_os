@@ -4,6 +4,8 @@ import os
 import threading
 import time
 import RPi.GPIO as GPIO
+import json
+from datetime import datetime, timezone
 
 app = Flask(__name__)
 
@@ -30,10 +32,18 @@ HTML_FORM = """
 </head>
 <body>
 <div style="max-width:400px;margin:auto;text-align:center;">
-<h2>Enter Device WiFi Credentials</h2>
+<h2>Enter Device Information</h2>
 <form method="POST">
-SSID: <input type="text" name="ssid" style="width:100%;"><br><br>
+<h3>Enter Wifi Credentials</h3>
+Wifi Name(SSID): <input type="text" name="ssid" style="width:100%;"><br><br>
 Password: <input type="password" name="password" style="width:100%;"><br><br>
+<h3>Enter Business Credentials</h3>
+<p><strong>Claim Code</strong> for your business can be found via web portal where you signed up at http://example.com - This code Must Match Exactly</p>
+claim_code: <input type="text" name="claim_code" style="width:100%;"><br><br>
+<p><strong>Device Business Location</strong> describes what location this device is located at for businesses wiht multiple locations - Must be the same accross all devices at this location</p>
+device_business_location: <input type="text" name="device_business_location" style="width:100%;"><br><br>
+<p><strong>Device Local Location</strong> describes the physical location of this device(I.E. Front Door, Back Door, Zone 1, Area 2) - Multiple Devices can have the same device location if they are located in the same spot.</p>
+device_local_location: <input type="text" name="device_local_location" style="width:100%;"><br><br>
 <input type="submit" value="Connect" style="width:100%;padding:10px;">
 </form>
 </div>
@@ -47,6 +57,16 @@ ATTEMPT_PAGE = """<html><body>
 This page may close or disconnect as the device reboots.</p>
 </body></html>"""
 
+# Get the device Serial Number Method
+def get_device_serial():
+    try:
+        with open('/proc/cpuinfo', 'r') as f:
+            for line in f:
+                if line.startswith('Serial'):
+                    return line.strip().split(':')[1].strip()
+    except:
+        return "ERROR: UNKNOWN SERIAL NUMBER"
+
 # --- Routes ---
 @app.route("/", methods=["GET", "POST"])
 @app.route("/hotspot-detect.html", methods=["GET", "POST"])
@@ -58,6 +78,22 @@ def index():
         password = request.form.get("password")
         if ssid and password:
             blinking = False
+            #Create File with Device Info
+            device_info = {
+                "serial_number": get_device_serial(),
+                "claim_code": request.form.get("claim_code"),
+                "device_business_location": request.form.get("device_business_location"),
+                "device_local_location": request.form.get("device_local_location"),
+                "device_type": "door_sensor",  # CHANGE BASED OFF OF SENSOR TYPE - OS SPECIFIC
+                "firmware_version": "v1.0.2",  # CHANGE WITH EVERY NEW RELEASE VERSION
+                "date_time_stamp": datetime.now(timezone.utc).isoformat(),
+                "date_stamp": datetime.now(timezone.utc).date().isoformat()
+            }
+
+            with open("/boot/firmware/device-info.json", "w") as f:
+                json.dump(device_info, f, indent=2)
+
+            # Work with the LED Light
             time.sleep(2)
             GPIO.output(LED_PIN, GPIO.LOW)
             monitor_thread = threading.Thread(target=monitor_wifi_led, daemon=True) # Start the real-time LED monitor
