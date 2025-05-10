@@ -77,7 +77,6 @@ def index():
         ssid = request.form.get("ssid")
         password = request.form.get("password")
         if ssid and password:
-            blinking = False
             #Create File with Device Info
             device_info = {
                 "serial_number": get_device_serial(),
@@ -93,11 +92,6 @@ def index():
             with open("/boot/firmware/device-info.json", "w") as f:
                 json.dump(device_info, f, indent=2)
 
-            # Work with the LED Light
-            time.sleep(2)
-            GPIO.output(LED_PIN, GPIO.LOW)
-            monitor_thread = threading.Thread(target=monitor_wifi_led, daemon=True) # Start the real-time LED monitor
-            monitor_thread.start()
             # Run Wi-Fi connect + reboot after slight delay
             def connect_and_reboot():
                 time.sleep(3)  # let browser render success first
@@ -106,6 +100,12 @@ def index():
                 ], capture_output=True, text=True)
 
                 if result.returncode == 0:
+                    #Turn on LED Monitoring
+                    global blinking
+                    blinking = False
+                    time.sleep(0.5)
+                    monitor_thread = threading.Thread(target=monitor_wifi_led, daemon=True) # Start the real-time LED monitor
+                    monitor_thread.start()
                     with open("/boot/firmware/provisioned.txt", "w") as f:
                         f.write(f"Connected to {ssid} at {time.ctime()}\n")
                     subprocess.Popen(["reboot"])
