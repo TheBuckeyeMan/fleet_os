@@ -54,8 +54,8 @@ This page may close or disconnect as the device reboots.</p>
 # --- Routes ---
 
 @app.route("/", methods=["GET", "POST"])
-@app.route("/hotspot-detect.html")
-@app.route("/ncsi.txt")
+@app.route("/hotspot-detect.html", methods=["GET", "POST"])
+@app.route("/ncsi.txt", methods=["GET", "POST"])
 def index():
     global blinking
     if request.method == "POST":
