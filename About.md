@@ -14,9 +14,7 @@ Troubleshooting.
  - If when you open the captive portal and it says "Method Not Aloud" 
     - Exit the captive portal and select "Continue without internet" open any web browser(Safari, google, chrome, etc) and type in http://setup Then, enter all related information there
 
-
-
-# ABout
+# About
 Think of the Raspberry Pi OS as a pipeline for different things that need to occure in the OS, outlined in each stage. Each stage represents the following
 
 Get WIFI Credentials wil be baked into the OS
@@ -133,6 +131,66 @@ On boot, check if Wi-Fi credentials already exist.
 A button will be placed on the device which will execute a script to delete the config file at /etc/wpa_supplicant/wpa_supplicant.conf, then restart the device so that it will then attempt to prompt the user to 
 
 
+# GPIO Pin SETUP
+the following are the pin configuration on the Raspberry Pi
 
-# End User
-A Captive portal should open as soon as you connect the device, however, if it does not, please open your web browser and type in http://10.42.0.1
+## Red LED Light
+
+### Bread Board Configuration 
+........ ----- 330R Resistor ------------------------------------------------- 330R Resistor ----- 
+........  GPIO BOARD PIN 11(BCM 17)                                          RED LED Long LEG
+........                                                                                           RED LED Short Leg
+........                                                                                           Ground BOARD PIN 9                 
+
+### Raspberry Pi Board Config
+. .
+. .
+. .
+. .
+GPIO BOARD PIN 11(BCM 17) .
+Ground BOARD PIN 9 .
+. .
+. .
+. .
+. .
+. .
+. .
+. .
+. .
+. .
+. .
+. .
+. .
+. .
+. .
+
+## Button Configuration 
+
+### Bread Board Configuration 
+........   ++++++++++Button++++++++++++++++++++++++++++++Button++++++++++                         
+........   GPIO BOARD PIN 40(BCM 21)                Ground BOARD PIN 39                              
+........                                                                                                          3.3V BOARD PIN 1
+........                                                                                                        
+........ ----- 10k Resistor --------------------------------------------------------------------------------------- 10k Resistor -----               
+
+### Raspberry Pi Board Config
+3.3V BOARD PIN 1 .
+. .
+. .
+. .
+. .
+. .
+. .
+. .
+. .
+. .
+. .
+. .
+. .
+. .
+. .
+. .
+. .
+. .
+. .
+Ground BOARD PIN 39    GPIO BOARD PIN 40(BCM 21)
