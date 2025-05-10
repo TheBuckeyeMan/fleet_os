@@ -1,0 +1,11 @@
+[Unit]
+Description=Post-WiFi Update: Install or Update Tools
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/post-wifi-update.sh
+
+[Install]
+WantedBy=multi-user.target
