@@ -1,0 +1,10 @@
+[Unit]
+Description=Reset Button Monitor
+After=network.target
+
+[Service]
+ExecStart=/usr/bin/python3 /usr/local/bin/reset-button.py
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

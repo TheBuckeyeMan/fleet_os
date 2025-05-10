@@ -19,13 +19,16 @@ apt-get install -y dnsutils
 apt-get install -y tcpdump
 EOF
 
-# Copy Flask server and systemd service
+# Copy Flask server and systemd service and reset button
 install -m 755 files/setup-server.py "${ROOTFS_DIR}/usr/local/bin/"
 install -m 644 files/ap-setup.service "${ROOTFS_DIR}/etc/systemd/system/"
+install -m 755 files/reset-button.py "${ROOTFS_DIR}/usr/local/bin/reset-button.py"
+install -m 644 files/reset-button.service "${ROOTFS_DIR}/etc/systemd/system/reset-button.service"
 
 # Enable the Flask systemd service
 on_chroot << EOF
 systemctl enable ap-setup.service
+systemctl enable reset-button.service
 EOF
 
 # Copy static NetworkManager AP profile
@@ -59,7 +62,6 @@ install -m 755 files/iptables-rules.sh "${ROOTFS_DIR}/usr/local/bin/iptables-rul
 on_chroot << EOF
 systemctl enable set-iptables.service
 EOF
-
 
 # Log build end
 echo "[Stage 01-ap-setup - END] $(date)" >> "${ROOTFS_DIR}/boot/firmware/build-stage-logs.txt"
