@@ -23,6 +23,7 @@ def blink_led():
         GPIO.output(LED_PIN, GPIO.LOW)
         time.sleep(0.3)
 
+
 # --- HTML Form ---
 HTML_FORM = """
 <html>
@@ -53,8 +54,12 @@ Device Local Location: <input type="text" name="device_local_location" style="wi
 
 ATTEMPT_PAGE = """<html><body>
 <h2>✅ Credentials Received</h2>
-<p>Device is testing the connection now.<br>
-This page may close or disconnect as the device reboots.</p>
+<p>Device is testing the connection now.</p><br>
+<h3>Successfully Connected?</h3>
+<p>If the device connects successfully, your LED will stop blinking and turn solid red after the reboot sequence takes place (<10 Seconds).</p>
+<h3>Device LED Still Blinking after 10 Seconds?</h3>
+<p>The Entered Wifi Credentials were incorrect or the device is unable to connect to the network. Please disconnect from the network, forget the network, and reconnect to the network</p>
+<p>This page may close or disconnect as the device reboots.</p>
 </body></html>"""
 
 # Get the device Serial Number Method
@@ -77,6 +82,7 @@ def index():
         ssid = request.form.get("ssid")
         password = request.form.get("password")
         if ssid and password:
+            blinking = False
             #Create File with Device Info
             device_info = {
                 "serial_number": get_device_serial(),
@@ -92,6 +98,11 @@ def index():
             with open("/boot/firmware/device-info.json", "w") as f:
                 json.dump(device_info, f, indent=2)
 
+            # Work with the LED Light
+            time.sleep(2)
+            GPIO.output(LED_PIN, GPIO.LOW)
+            monitor_thread = threading.Thread(target=monitor_wifi_led, daemon=True) # Start the real-time LED monitor
+            monitor_thread.start()
             # Run Wi-Fi connect + reboot after slight delay
             def connect_and_reboot():
                 time.sleep(3)  # let browser render success first
@@ -100,12 +111,6 @@ def index():
                 ], capture_output=True, text=True)
 
                 if result.returncode == 0:
-                    #Turn on LED Monitoring
-                    global blinking
-                    blinking = False
-                    time.sleep(0.5)
-                    monitor_thread = threading.Thread(target=monitor_wifi_led, daemon=True) # Start the real-time LED monitor
-                    monitor_thread.start()
                     with open("/boot/firmware/provisioned.txt", "w") as f:
                         f.write(f"Connected to {ssid} at {time.ctime()}\n")
                     subprocess.Popen(["reboot"])
