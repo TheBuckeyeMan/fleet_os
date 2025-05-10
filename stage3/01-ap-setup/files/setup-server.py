@@ -110,11 +110,16 @@ def index():
                 ], capture_output=True, text=True)
 
                 if result.returncode == 0:
+                    
                     with open("/boot/firmware/provisioned.txt", "w") as f:
                         f.write(f"Connected to {ssid} at {time.ctime()}\n")
                     subprocess.Popen(["reboot"])
                 else:
                     print(f"WiFi connect failed:\n{result.stderr}")
+                    global blinking
+                    blinking = True
+                    blink_thread = threading.Thread(target=blink_led)
+                    blink_thread.start()
 
             threading.Thread(target=connect_and_reboot).start()
             return ATTEMPT_PAGE
