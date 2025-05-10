@@ -35,15 +35,15 @@ HTML_FORM = """
 <h2>Enter Device Information</h2>
 <form method="POST">
 <h3>Enter Wifi Credentials</h3>
-Wifi Name(SSID): <input type="text" name="ssid" style="width:100%;"><br><br>
-Password: <input type="password" name="password" style="width:100%;"><br><br>
+Wifi Name(SSID): <input type="text" name="ssid" style="width:100%;" required><br><br>
+Password: <input type="password" name="password" style="width:100%;" required><br><br>
 <h3>Enter Business Credentials</h3>
-<p><strong>Claim Code</strong> for your business can be found via web portal where you signed up at http://example.com - This code Must Match Exactly</p>
-claim_code: <input type="text" name="claim_code" style="width:100%;"><br><br>
-<p><strong>Device Business Location</strong> describes what location this device is located at for businesses wiht multiple locations - Must be the same accross all devices at this location</p>
-device_business_location: <input type="text" name="device_business_location" style="width:100%;"><br><br>
+<p><strong>Claim Code</strong> for your business can be found via web portal where you signed up at http://example.com - <strong>This Claim Code Must Match Exactly</strong></p>
+Claim Code: <input type="text" name="claim_code" style="width:100%;" required><br><br>
+<p><strong>Device Business Location</strong> describes what location this device is located at for businesses with multiple locations - <strong>Must be the same accross all devices at this location</strong></p>
+Device Business Location: <input type="text" name="device_business_location" style="width:100%;" required><br><br>
 <p><strong>Device Local Location</strong> describes the physical location of this device(I.E. Front Door, Back Door, Zone 1, Area 2) - Multiple Devices can have the same device location if they are located in the same spot.</p>
-device_local_location: <input type="text" name="device_local_location" style="width:100%;"><br><br>
+Device Local Location: <input type="text" name="device_local_location" style="width:100%;" required><br><br>
 <input type="submit" value="Connect" style="width:100%;padding:10px;">
 </form>
 </div>
@@ -86,8 +86,8 @@ def index():
                 "device_local_location": request.form.get("device_local_location"),
                 "device_type": "door_sensor",  # CHANGE BASED OFF OF SENSOR TYPE - OS SPECIFIC
                 "firmware_version": "v1.0.2",  # CHANGE WITH EVERY NEW RELEASE VERSION
-                "date_time_stamp": datetime.now(timezone.utc).isoformat(),
-                "date_stamp": datetime.now(timezone.utc).date().isoformat()
+                "device_create_date_time_stamp": datetime.now(timezone.utc).isoformat(),
+                "device_create_date_stamp": datetime.now(timezone.utc).date().isoformat()
             }
 
             with open("/boot/firmware/device-info.json", "w") as f:
@@ -165,6 +165,7 @@ if __name__ == '__main__':
             time.sleep(60)
     else:
         print("[INFO] Not connected to WiFi — starting pairing mode.")
+        blinking = True
         blink_thread = threading.Thread(target=blink_led)
         blink_thread.start()
         app.run(host='0.0.0.0', port=80)
