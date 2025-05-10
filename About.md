@@ -1,5 +1,17 @@
 # Custom about file to tel us about the functionality of the raspberry pi OS imager
 
+# Customer Set up Deveice Instructions
+1. Plug in the device
+2. In wifi settings, you should see the network <Network Name here> Appear
+3. Click on the <Network Name Here> and enter the password of <Passwrod>
+4. A pop up screen should appear requesting you pass in your wifi credentials, as well as other business related information. Enter the required informationa and press submit
+   - If a pop up window does not populate, try the following
+     - 1. Forget the network <Network name here> the wifi settings on your phone and reboot and try again. The portal should be displayed
+     - 2. If that does not work, connect to the network <Enter NEtwork Name Here>. Once connected, open any web browser(Safari, google, chrome, etc) and type in http://setup. This should display the form and you will beable to submit credentials there
+     - 3. If that does not work, connect to the network <Enter NEtwork Name Here>. Once connected, open any web browser(Safari, google, chrome, etc) and type in http://10.42.0.1 The work should then be displayed there. Please fill out and submit
+     - 4. If that does not work, Contact our service desk at <Gmail for service desk here>.
+
+
 # ABout
 Think of the Raspberry Pi OS as a pipeline for different things that need to occure in the OS, outlined in each stage. Each stage represents the following
 
