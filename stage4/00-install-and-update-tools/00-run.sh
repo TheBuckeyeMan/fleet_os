@@ -8,7 +8,7 @@
 # mkdir -p "${ROOTFS_DIR}/tmp"
 # mkdir -p "${ROOTFS_DIR}/etc/systemd/system"
 # mkdir -p "${ROOTFS_DIR}/usr/local/bin"
-
+# mkdir -p "${ROOTFS_DIR}/boot/firmware"  # if you're logging there
 
 # Install the script and systemd unit
 install -m 755 files/post-wifi-update.sh "${ROOTFS_DIR}/usr/local/bin/post-wifi-update.sh"
