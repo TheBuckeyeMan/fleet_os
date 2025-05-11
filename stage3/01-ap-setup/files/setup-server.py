@@ -104,7 +104,7 @@ def index():
             monitor_thread.start()
             # Run Wi-Fi connect + reboot after slight delay
             def connect_and_reboot():
-                time.sleep(3)  # let browser render success first
+                time.sleep(1)  # let browser render success first
                 result = subprocess.run([
                     "nmcli", "device", "wifi", "connect", ssid, "password", password
                 ], capture_output=True, text=True)
