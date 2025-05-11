@@ -1,15 +1,13 @@
 #!/bin/bash -e
 
-mkdir -p "${ROOTFS_DIR}/dev"
-mkdir -p "${ROOTFS_DIR}/dev/pts"
-mkdir -p "${ROOTFS_DIR}/sys"
-mkdir -p "${ROOTFS_DIR}/proc"
-mkdir -p "${ROOTFS_DIR}/run"
-mkdir -p "${ROOTFS_DIR}/tmp"
-mkdir -p "${ROOTFS_DIR}/etc/systemd/system"
-mkdir -p "${ROOTFS_DIR}/usr/local/bin"
-
-
+# mkdir -p "${ROOTFS_DIR}/dev"
+# mkdir -p "${ROOTFS_DIR}/dev/pts"
+# mkdir -p "${ROOTFS_DIR}/sys"
+# mkdir -p "${ROOTFS_DIR}/proc"
+# mkdir -p "${ROOTFS_DIR}/run"
+# mkdir -p "${ROOTFS_DIR}/tmp"
+# mkdir -p "${ROOTFS_DIR}/etc/systemd/system"
+# mkdir -p "${ROOTFS_DIR}/usr/local/bin"
 
 
 # Install the script and systemd unit
