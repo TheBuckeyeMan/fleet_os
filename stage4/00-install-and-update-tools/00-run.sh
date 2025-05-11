@@ -1,6 +1,9 @@
 #!/bin/bash -e
 
 mkdir -p "${ROOTFS_DIR}/usr/local/bin"
+mkdir -p "${ROOTFS_DIR}/etc/systemd/system"
+
+
 
 # Install the script and systemd unit
 install -m 755 files/post-wifi-update.sh "${ROOTFS_DIR}/usr/local/bin/post-wifi-update.sh"
