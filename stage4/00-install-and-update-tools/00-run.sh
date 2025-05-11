@@ -1,7 +1,9 @@
 #!/bin/bash -e
 
-mkdir -p "${ROOTFS_DIR}/usr/local/bin"
+mkdir -p "${ROOTFS_DIR}/proc"
 mkdir -p "${ROOTFS_DIR}/etc/systemd/system"
+mkdir -p "${ROOTFS_DIR}/usr/local/bin"
+
 
 
 
