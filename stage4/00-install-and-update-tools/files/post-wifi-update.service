@@ -1,11 +1,13 @@
 [Unit]
-Description=Post-WiFi Update: Install or Update Tools
-After=network-online.target
-Wants=network-online.target
+Description=Post Wi-Fi Configuration Hook
+After=multi-user.target
+After=network.target NetworkManager.service NetworkManager-wait-online.service
+Wants=network-online.target NetworkManager-wait-online.service
 
 [Service]
-Type=oneshot
 ExecStart=/usr/local/bin/post-wifi-update.sh
+Type=oneshot
+RemainAfterExit=true
 
 [Install]
 WantedBy=multi-user.target
