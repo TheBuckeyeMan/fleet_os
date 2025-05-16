@@ -1,0 +1,14 @@
+[Unit]
+Description=Run Docker Images
+After=pull-images.service
+Requires=pull-images.service
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/run-images.sh
+RemainAfterExit=true
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target

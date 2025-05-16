@@ -1,7 +1,7 @@
 #!/bin/bash
 
 log() {
-    logger -t docker-setup "$1"
+    logger -t install-pi-tools "$1"
 }
 
 log "[ OK ] Begining to Install PI Tools"

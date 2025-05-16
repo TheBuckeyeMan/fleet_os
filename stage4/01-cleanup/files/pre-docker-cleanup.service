@@ -1,0 +1,14 @@
+[Unit]
+Description=Clean Up Docker Images if they exist on the device
+After=post-wifi-update.service
+Requires=post-wifi-update.service
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/pre-docker-cleanup.sh
+RemainAfterExit=true
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target

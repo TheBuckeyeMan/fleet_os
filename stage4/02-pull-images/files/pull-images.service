@@ -1,0 +1,14 @@
+[Unit]
+Description=Pull Docker Images
+After=pre-docker-cleanup.service
+Requires=pre-docker-cleanup.service
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/pull-images.sh
+RemainAfterExit=true
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target
