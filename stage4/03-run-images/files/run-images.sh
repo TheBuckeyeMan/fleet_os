@@ -19,3 +19,5 @@ fi
 log "[ INFO ] Launching container $CONTAINER_NAME..."
 docker run -d --name "$CONTAINER_NAME" --restart unless-stopped -v /boot/firmware/device-info.json:/app/device-info.json:ro "$IMAGE_NAME" 2>&1 | logger -t docker-run
 log "[ OK ] Container $CONTAINER_NAME has been launched successfully!"
+
+8779869669
