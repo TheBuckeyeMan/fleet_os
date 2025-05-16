@@ -1,13 +1,14 @@
 [Unit]
-Description=Post Wi-Fi Configuration Hook
-After=multi-user.target
-After=network.target NetworkManager.service NetworkManager-wait-online.service
-Wants=network-online.target NetworkManager-wait-online.service
+Description=Install PI Tools
+After=network-online.target
+Wants=network-online.target
 
 [Service]
-ExecStart=/usr/local/bin/post-wifi-update.sh
 Type=oneshot
 RemainAfterExit=true
+ExecStart=/usr/local/bin/post-wifi-update.sh
+StandardOutput=journal
+StandardError=journal
 
 [Install]
 WantedBy=multi-user.target

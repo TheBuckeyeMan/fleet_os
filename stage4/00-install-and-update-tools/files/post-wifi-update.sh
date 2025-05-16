@@ -1,56 +1,40 @@
 #!/bin/bash
 
-LOGFILE="/var/log/post-wifi-update.log"
-echo "[$(date)] Starting post-wifi-update..." >> "$LOGFILE"
+log() {
+    logger -t docker-setup "$1"
+}
 
-# Wait until wlan0 has an IP address
+log "[ OK ] Begining to Install PI Tools"
+
+#Script to check if the wifi is up and running 
 for i in {1..10}; do
-    if ip addr show wlan0 | grep "inet " > /dev/null; then
-        echo "wlan0 has IP address." >> "$LOGFILE"
+    if ping -c 1 8.8.8.8 &> /dev/null; then
+        log "[ OK ] Device Connected to Internet"
         break
+    else 
+        log "[ WARN ] Device is not connected to the Internet. Retrying in 5 seconds..."
     fi
-    echo "Waiting for wlan0 to get IP..." >> "$LOGFILE"
+    
+    log "[ INFO ] Not connected yet (attempt $i/10)..."
     sleep 5
 done
 
-# Double-check internet availability
-for i in {1..10}; do
-    if ping -c 1 8.8.8.8 &>/dev/null; then
-        echo "Internet available." >> "$LOGFILE"
-        break
-    fi
-    echo "Waiting for internet..." >> "$LOGFILE"
-    sleep 5
-done
-
-# If still no connection, exit
-if ! ping -c 1 8.8.8.8 &>/dev/null; then
-    echo "No internet. Skipping updates." >> "$LOGFILE"
-    exit 1
+#Do one final validation
+if ! ping -c 1 8.8.8.8 &> /dev/null; then
+    log "[ ERROR ] Device is not connected to the Internet. Docker wand other required tools will not be installed..."
+    exit 0
 fi
 
-# Update package lists
-apt-get update >> "$LOGFILE" 2>&1
-
-# Docker check and install/update
+# Install or update Docker
 if ! command -v docker &> /dev/null; then
-    echo "Docker not found. Installing..." >> "$LOGFILE"
-    apt-get install -y docker.io >> "$LOGFILE" 2>&1
+    log "[ INFO ] Docker not installed. Installing Docker..."
+    curl -fsSL https://get.docker.com -o /tmp/get-docker.sh
+    sh /tmp/get-docker.sh 2>&1 | logger -t docker-setup
+    log "[ OK ] DOcker has been Installed!"
 else
-    echo "Docker found. Updating if needed..." >> "$LOGFILE"
-    apt-get install --only-upgrade -y docker.io >> "$LOGFILE" 2>&1 || echo "Docker not upgraded or already latest" >> "$LOGFILE"
+    log "[ INFO ] Docker already installed. Updating Docker..."
+    apt-get update && apt-get install --only-upgrade docker-ce docker-ce-cli containerd.io -y 2>&1 | logger -t docker-setup
+    log "[ OK ] Docker has been updated successfully!"
 fi
 
-# Enable Docker to start on boot
-systemctl enable docker >> "$LOGFILE" 2>&1
-
-# Install or update nmap-ncat
-if ! command -v ncat &> /dev/null; then
-    echo "Installing nmap-ncat..." >> "$LOGFILE"
-    apt-get install -y nmap >> "$LOGFILE" 2>&1
-else
-    echo "nmap-ncat found. Updating..." >> "$LOGFILE"
-    apt-get install --only-upgrade -y nmap >> "$LOGFILE" 2>&1
-fi
-
-echo "[$(date)] Tool install/update complete." >> "$LOGFILE"
+log '[ INFO ] Pi Tools has been successfully Installed"
