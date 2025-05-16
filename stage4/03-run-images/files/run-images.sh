@@ -1,4 +1,4 @@
-#! /bin/bash
+#!/bin/bash
 
 IMAGE_NAME="thebuckeyeman20/pi:register"
 CONTAINER_NAME="pi-register"
