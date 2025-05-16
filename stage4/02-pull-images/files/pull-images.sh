@@ -1,4 +1,4 @@
-#1/bin/bash
+#!/bin/bash
 
 IMAGE_NAME="thebuckeyeman20/pi:register"
 
@@ -6,7 +6,7 @@ log() {
     logger -t pull-image-pull "$1"
 }
 
-log "[ INFO ] STarting the docker pull images process..."
+log "[ INFO ] Starting the docker pull images process..."
 
 #Check if docker is installed, if not, exit
 if ! command -v docker &> /dev/null; then
