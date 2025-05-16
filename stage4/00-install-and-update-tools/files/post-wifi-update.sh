@@ -37,4 +37,4 @@ else
     log "[ OK ] Docker has been updated successfully!"
 fi
 
-log '[ INFO ] Pi Tools has been successfully Installed"
+log "[ INFO ] Pi Tools has been successfully Installed"
