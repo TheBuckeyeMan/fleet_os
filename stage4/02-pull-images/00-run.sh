@@ -1,8 +1,8 @@
 #!/bin/bash -e
 
-install -m 755 files/post-wifi-update.sh "${ROOTFS_DIR}/usr/local/bin/post-wifi-update.sh"
-install -m 644 files/post-wifi-update.service "${ROOTFS_DIR}/etc/systemd/system/post-wifi-update.service"
+install -m 755 files/pull-images.sh "${ROOTFS_DIR}/usr/local/bin/pull-images.sh"
+install -m 644 files/pull-images.service "${ROOTFS_DIR}/etc/systemd/system/pull-images.service"
 
 on_chroot << EOF
-systemctl enable post-wifi-update.service
+systemctl enable pull-images.service
 EOF
